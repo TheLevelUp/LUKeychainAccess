@@ -10,6 +10,8 @@ Import the following files into your project, then `#import` the `LUKeychainAcce
 - `LUKeychainAccess.h`
 - `LUKeychainAccess.m`
 
+Add `Security.framework` under "Link Binary With Libraries" in "Build Phases" of your build target.
+
 Use `LUKeychainAccess` just as you would use `NSUserDefaults`:
 
     [[LUKeychainAccess standardKeychainAccess] setBool:NO forKey:@"authorized"];
