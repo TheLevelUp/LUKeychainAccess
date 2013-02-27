@@ -71,6 +71,18 @@
 
 #pragma mark - Setters
 
+- (void)registerDefaults:(NSDictionary *)dictionary {
+  for (NSString *key in [dictionary allKeys]) {
+    if (![self objectForKey:key]) {
+      if ([dictionary[key] isKindOfClass:[NSString class]]) {
+        [self setString:dictionary[key] forKey:key];
+      } else {
+        [self setObject:dictionary[key] forKey:key];
+      }
+    }
+  }
+}
+
 - (void)setBool:(BOOL)value forKey:(NSString *)key {
   [self setObject:@(value) forKey:key];
 }
