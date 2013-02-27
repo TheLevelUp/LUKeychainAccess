@@ -13,6 +13,7 @@
 - (NSString *)stringForKey:(NSString *)key;
 
 // Setters
+- (void)registerDefaults:(NSDictionary *)dictionary;
 - (void)setBool:(BOOL)value forKey:(NSString *)key;
 - (void)setData:(NSData *)data forKey:(NSString *)key;
 - (void)setDouble:(double)value forKey:(NSString *)key;

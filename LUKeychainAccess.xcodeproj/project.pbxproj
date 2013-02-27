@@ -91,7 +91,10 @@
 				0226874316BAD892008FC8FA /* Products */,
 				028518F716BADB90000C43F0 /* Pods-test.xcconfig */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
 		};
 		0226874316BAD892008FC8FA /* Products */ = {
 			isa = PBXGroup;

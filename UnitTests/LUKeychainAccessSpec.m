@@ -125,6 +125,48 @@ describe(@"LUKeychainAccess", ^{
 
   // Setters
 
+  describe(@"registerDefaults:", ^{
+    NSDictionary *existingDefaults = @{@"existingKey" : @"existingValue"};
+    NSArray *newDefaultKeys = @[@"newKey", @"foo", @"bar"];
+
+    beforeEach(^{
+      for (NSString *newKey in newDefaultKeys) {
+        [keychainAccess setObject:nil forKey:newKey];
+      }
+
+      for (NSString *key in [existingDefaults allKeys]) {
+        [[keychainAccess stubAndReturn:existingDefaults[key]] objectForKey:key];
+      }
+    });
+
+    it(@"sets strings using setString: instead of setObject:", ^{
+      NSString *newValue = @"newValue";
+      [[[keychainAccess should] receive] setString:newValue forKey:@"newKey"];
+      [keychainAccess registerDefaults:@{@"newKey": newValue}];
+    });
+
+    it(@"sets other data types via setObject:", ^{
+      [[[keychainAccess should] receive] setObject:@1 forKey:@"newKey"];
+      [keychainAccess registerDefaults:@{@"newKey" : @1}];
+    });
+
+    it(@"doesn't overwrite existing values", ^{
+      [[[keychainAccess shouldNot] receive] setObject:@YES forKey:@"existingKey"];
+      [keychainAccess registerDefaults:@{@"existingKey" : @YES}];
+    });
+
+    it(@"sets the value for new keys", ^{
+      [[[keychainAccess should] receive] setObject:@YES forKey:@"newKey"];
+      [keychainAccess registerDefaults:@{@"newKey" : @YES}];
+    });
+
+    it(@"can set multiple keys", ^{
+      [[[keychainAccess should] receive] setObject:@YES forKey:@"foo"];
+      [[[keychainAccess should] receive] setObject:@100 forKey:@"bar"];
+      [keychainAccess registerDefaults:@{@"foo" : @YES, @"bar" : @100}];
+    });
+  });
+
   describe(@"setBool:forKey:", ^{
     NSString *key = @"boolTest";
 
