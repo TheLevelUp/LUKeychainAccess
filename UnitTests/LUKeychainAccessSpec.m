@@ -25,6 +25,22 @@ describe(@"LUKeychainAccess", ^{
     });
   });
 
+  describe(@"deleteAll", ^{
+    beforeEach(^{
+      [keychainAccess setBool:YES forKey:@"boolTest"];
+      [keychainAccess setString:@"test string" forKey:@"stringTest"];
+      [keychainAccess setObject:@[@1, @2] forKey:@"objectTest"];
+    });
+
+    it(@"deletes all objects stored in the Keychain", ^{
+      [keychainAccess deleteAll];
+
+      [[theValue([keychainAccess boolForKey:@"boolTest"]) should] beNo];
+      [[keychainAccess stringForKey:@"stringTest"] shouldBeNil];
+      [[keychainAccess objectForKey:@"objectTest"] shouldBeNil];
+    });
+  });
+
   // Getters
 
   describe(@"boolForKey:", ^{

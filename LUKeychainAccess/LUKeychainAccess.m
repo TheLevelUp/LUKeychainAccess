@@ -17,6 +17,12 @@
   return self;
 }
 
+- (void)deleteAll {
+  NSMutableDictionary *query = [NSMutableDictionary dictionary];
+  query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
+  SecItemDelete((__bridge CFDictionaryRef)query);
+}
+
 #pragma mark - Getters
 
 - (BOOL)boolForKey:(NSString *)key {
