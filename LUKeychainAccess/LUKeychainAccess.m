@@ -1,5 +1,11 @@
 #import "LUKeychainAccess.h"
 
+@interface LUKeychainAccess ()
+
+@property (nonatomic, strong) NSError *lastError;
+
+@end
+
 @implementation LUKeychainAccess
 
 #pragma mark - Public Methods
@@ -17,10 +23,23 @@
   return self;
 }
 
-- (void)deleteAll {
+- (BOOL)deleteAll {
   NSMutableDictionary *query = [NSMutableDictionary dictionary];
   query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
-  SecItemDelete((__bridge CFDictionaryRef)query);
+  OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
+
+  if (status != noErr) {
+    self.lastError = [self errorFromOSStatus:status];
+    return NO;
+  }
+
+  return YES;
+}
+
+#pragma mark - Error Handling
+
+- (void)clearLastError {
+  self.lastError = nil;
 }
 
 #pragma mark - Getters
@@ -30,22 +49,19 @@
 }
 
 - (NSData *)dataForKey:(NSString *)key {
-  if (!key) {
-    return nil;
-  }
-
   NSMutableDictionary *query = [self queryDictionaryForKey:key];
   query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitOne;
   query[(__bridge id)kSecReturnData] = (__bridge id)kCFBooleanTrue;
 
   CFTypeRef result;
-  OSStatus error = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
+  OSStatus osError = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
 
-  if (error == noErr) {
-    return CFBridgingRelease(result);
+  if (osError != noErr) {
+    self.lastError = [self errorFromOSStatus:osError];
+    return nil;
   }
 
-  return nil;
+  return CFBridgingRelease(result);
 }
 
 - (double)doubleForKey:(NSString *)key {
@@ -63,22 +79,16 @@
 - (NSString *)stringForKey:(NSString *)key {
   NSData *data = [self dataForKey:key];
 
-  if (data) {
-    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-  }
+  if (!data) return nil;
 
-  return nil;
+  return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
 - (id)objectForKey:(NSString *)key {
   NSData *data = [self dataForKey:key];
 
   if (data) {
-    @try {
-      return [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    } @catch (NSException *e) {
-      NSLog(@"Unarchive of %@ failed: %@", key, e);
-    }
+    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
   }
 
   return nil;
@@ -111,13 +121,17 @@
   NSMutableDictionary *query = [self queryDictionaryForKey:key];
   query[(__bridge id)kSecValueData] = data;
 
-  OSStatus addStatus = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
+  OSStatus status = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
 
-  if (addStatus == errSecDuplicateItem) {
+  if (status == errSecDuplicateItem) {
     NSMutableDictionary *updateQuery = [NSMutableDictionary dictionary];
     updateQuery[(__bridge id)kSecValueData] = data;
 
-    SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)updateQuery);
+    status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)updateQuery);
+  }
+
+  if (status != noErr) {
+    self.lastError = [self errorFromOSStatus:status];
   }
 }
 
@@ -169,15 +183,57 @@
 }
 
 - (void)deleteObjectForKey:(NSString *)key {
-  if (key == nil) {
-    return;
-  }
-
   NSMutableDictionary *query = [self queryDictionaryForKey:key];
-  SecItemDelete((__bridge CFDictionaryRef)query);
+  OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
+
+  if (status != noErr) {
+    self.lastError = [self errorFromOSStatus:status];
+  }
+}
+
+- (NSError *)errorFromOSStatus:(OSStatus)status {
+  return [NSError errorWithDomain:NSOSStatusErrorDomain
+                             code:status
+                         userInfo:@{NSLocalizedDescriptionKey : [self errorMessageFromOSStatus:status]}];
+}
+
+- (NSString *)errorMessageFromOSStatus:(OSStatus)status {
+  switch (status) {
+    case errSecUnimplemented:
+      return @"Function or operation not implemented.";
+
+    case errSecParam:
+      return @"One or more parameters passed to a function where not valid.";
+
+    case errSecAllocate:
+      return @"Failed to allocate memory.";
+
+    case errSecNotAvailable:
+      return @"No keychain is available. You may need to restart your computer.";
+
+    case errSecDuplicateItem:
+      return @"The specified item already exists in the keychain.";
+
+    case errSecItemNotFound:
+      return @"The specified item could not be found in the keychain.";
+
+    case errSecInteractionNotAllowed:
+      return @"User interaction is not allowed.";
+
+    case errSecDecode:
+      return @"Unable to decode the provided data.";
+
+    case errSecAuthFailed:
+      return @"The user name or passphrase you entered is not correct.";
+
+    default:
+      return @"No error.";
+  }
 }
 
 - (NSMutableDictionary *)queryDictionaryForKey:(NSString *)key {
+  NSAssert(key != nil, @"A non-nil key must be provided.");
+
   NSMutableDictionary *query = [NSMutableDictionary dictionary];
   query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
   query[(__bridge id)kSecAttrAccessible] = (__bridge id)[self accessibilityStateCFType];

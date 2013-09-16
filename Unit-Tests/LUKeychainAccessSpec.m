@@ -41,6 +41,19 @@ describe(@"LUKeychainAccess", ^{
     });
   });
 
+  // Error Handling
+
+  describe(@"clearLastError", ^{
+    it(@"clears lastError", ^{
+      [keychainAccess setValue:[NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:nil]
+                        forKey:@"lastError"];
+
+      [keychainAccess clearLastError];
+
+      [[keychainAccess lastError] shouldBeNil];
+    });
+  });
+
   // Getters
 
   describe(@"boolForKey:", ^{

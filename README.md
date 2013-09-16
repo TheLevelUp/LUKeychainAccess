@@ -34,6 +34,10 @@ This option can be set in `LUKeychainAccess` through the `accessibilityState` pa
 
 The default value is `LUKeychainAccessAttrAccessibleWhenUnlocked`.
 
+## Error Handling
+
+When an error occurs, `lastError` will be set to an appropriate NSError instance. The method `clearLastError` can be called to set this to `nil`.
+
 ## Requirements
 
 `LUKeychainAccess` requires iOS 5.0+. The tests are written using [Kiwi](https://github.com/allending/Kiwi).

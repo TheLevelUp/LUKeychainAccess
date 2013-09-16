@@ -13,7 +13,11 @@ typedef NS_ENUM(NSInteger, LUKeychainAccessAccessibility) {
 
 // Public Methods
 + (LUKeychainAccess *)standardKeychainAccess;
-- (void)deleteAll;
+- (BOOL)deleteAll;
+
+// Error Handling
+- (void)clearLastError;
+- (NSError *)lastError;
 
 // Getters
 - (BOOL)boolForKey:(NSString *)key;
