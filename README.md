@@ -19,10 +19,25 @@ Use `LUKeychainAccess` just as you would use `NSUserDefaults`:
 
 There are methods for getting and setting BOOL, double, float and NSInteger types, as well as `NSString`, `NSData` and generic `NSObject` objects. You may use any object that can be encoded with `NSKeyedArchiver`.
 
+## Accessibility
+
+Keychain Services has several options for when a keychain item can be readable.
+
+This option can be set in `LUKeychainAccess` through the `accessibilityState` parameter. Its possible values match those [provided by Apple](https://developer.apple.com/library/ios/DOCUMENTATION/Security/Reference/keychainservices/Reference/reference.html#//apple_ref/doc/constant_group/Keychain_Item_Accessibility_Constants):
+
+- `LUKeychainAccessAttrAccessibleAfterFirstUnlock`
+- `LUKeychainAccessAttrAccessibleAfterFirstUnlockThisDeviceOnly`
+- `LUKeychainAccessAttrAccessibleAlways`
+- `LUKeychainAccessAttrAccessibleAlwaysThisDeviceOnly`
+- `LUKeychainAccessAttrAccessibleWhenUnlocked`
+- `LUKeychainAccessAttrAccessibleWhenUnlockedThisDeviceOnly`
+
+The default value is `LUKeychainAccessAttrAccessibleWhenUnlocked`.
+
 ## Requirements
 
 `LUKeychainAccess` requires iOS 5.0+. The tests are written using [Kiwi](https://github.com/allending/Kiwi).
 
 ## License
 
-`LUKeychainAccess` is written by Costa Walcott, and is Copyright 2012 SCVNGR, Inc. It is free software, and may be redistributed under the terms specified in the MIT-LICENSE file.
+`LUKeychainAccess` is written by Costa Walcott, and is Copyright 2012-2013 SCVNGR, Inc D.B.A. LevelUp. It is free software, and may be redistributed under the terms specified in the MIT-LICENSE file.

@@ -1,4 +1,15 @@
+typedef NS_ENUM(NSInteger, LUKeychainAccessAccessibility) {
+  LUKeychainAccessAttrAccessibleAfterFirstUnlock,
+  LUKeychainAccessAttrAccessibleAfterFirstUnlockThisDeviceOnly,
+  LUKeychainAccessAttrAccessibleAlways,
+  LUKeychainAccessAttrAccessibleAlwaysThisDeviceOnly,
+  LUKeychainAccessAttrAccessibleWhenUnlocked,
+  LUKeychainAccessAttrAccessibleWhenUnlockedThisDeviceOnly
+};
+
 @interface LUKeychainAccess : NSObject
+
+@property (nonatomic, assign) LUKeychainAccessAccessibility accessibilityState;
 
 // Public Methods
 + (LUKeychainAccess *)standardKeychainAccess;
