@@ -17,7 +17,6 @@
 		0226877116BAD99F008FC8FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226877016BAD99F008FC8FA /* Security.framework */; };
 		0226877216BAD9AC008FC8FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226877016BAD99F008FC8FA /* Security.framework */; };
 		0226877416BADA41008FC8FA /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226877316BADA41008FC8FA /* libPods-test.a */; };
-		028518F816BADB90000C43F0 /* Pods-test.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 028518F716BADB90000C43F0 /* Pods-test.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -188,7 +187,7 @@
 		0226873A16BAD892008FC8FA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = SCVNGR;
 			};
 			buildConfigurationList = 0226873D16BAD892008FC8FA /* Build configuration list for PBXProject "LUKeychainAccess" */;
@@ -214,7 +213,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				028518F816BADB90000C43F0 /* Pods-test.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,7 +275,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_VERSION = 1.0.2;
+				FRAMEWORK_VERSION = 1.1.0;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -308,7 +306,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_VERSION = 1.0.2;
+				FRAMEWORK_VERSION = 1.1.0;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
