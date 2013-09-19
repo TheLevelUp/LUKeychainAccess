@@ -1,3 +1,9 @@
+extern NSString *LUKeychainAccessErrorDomain;
+
+typedef NS_ENUM(NSInteger, LUKeychainAccessError) {
+  LUKeychainAccessInvalidArchiveError
+};
+
 typedef NS_ENUM(NSInteger, LUKeychainAccessAccessibility) {
   LUKeychainAccessAttrAccessibleAfterFirstUnlock,
   LUKeychainAccessAttrAccessibleAfterFirstUnlockThisDeviceOnly,

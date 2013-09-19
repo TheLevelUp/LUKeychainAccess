@@ -1,5 +1,7 @@
 #import "LUKeychainAccess.h"
 
+NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
+
 @interface LUKeychainAccess ()
 
 @property (nonatomic, strong) NSError *lastError;
@@ -87,8 +89,14 @@
 - (id)objectForKey:(NSString *)key {
   NSData *data = [self dataForKey:key];
 
-  if (data) {
-    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+  @try {
+    if (data) {
+      return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+  } @catch (NSException *e) {
+    self.lastError = [NSError errorWithDomain:LUKeychainAccessErrorDomain
+                                         code:LUKeychainAccessInvalidArchiveError
+                                     userInfo:@{NSLocalizedDescriptionKey: [e description]}];
   }
 
   return nil;
