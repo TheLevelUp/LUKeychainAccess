@@ -18,5 +18,4 @@ DerivedData
 .idea/
 
 # CocoaPods
-Podfile.lock
 Pods
