@@ -36,7 +36,7 @@ The default value is `LUKeychainAccessAttrAccessibleWhenUnlocked`.
 
 ## Error Handling
 
-An instance of `LUKeychainAccess` may be optionally given a error handler, which can be any object that implements the `LUTestErrorHandler` protocol. This error handler will be notified if an error occurs.
+An instance of `LUKeychainAccess` may be optionally given a error handler, which can be any object that implements the `LUKeychainErrorHandler` protocol. This error handler will be notified if an error occurs.
 
 ## Requirements
 
