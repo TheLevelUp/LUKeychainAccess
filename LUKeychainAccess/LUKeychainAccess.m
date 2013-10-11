@@ -1,4 +1,5 @@
 #import "LUKeychainAccess.h"
+#import "LUKeychainServices.h"
 
 NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 
@@ -28,7 +29,7 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 - (BOOL)deleteAll {
   NSMutableDictionary *query = [NSMutableDictionary dictionary];
   query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
-  OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
+  OSStatus status = [[LUKeychainServices keychainServices] secItemDelete:query];
 
   if (status != noErr) {
     self.lastError = [self errorFromOSStatus:status];
@@ -55,15 +56,15 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitOne;
   query[(__bridge id)kSecReturnData] = (__bridge id)kCFBooleanTrue;
 
-  CFTypeRef result;
-  OSStatus osError = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
+  id result;
+  OSStatus osError = [[LUKeychainServices keychainServices] secItemCopyMatching:query result:&result];
 
   if (osError != noErr) {
     self.lastError = [self errorFromOSStatus:osError];
     return nil;
   }
 
-  return CFBridgingRelease(result);
+  return result;
 }
 
 - (double)doubleForKey:(NSString *)key {
@@ -129,13 +130,13 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   NSMutableDictionary *query = [self queryDictionaryForKey:key];
   query[(__bridge id)kSecValueData] = data;
 
-  OSStatus status = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
+  OSStatus status = [[LUKeychainServices keychainServices] secItemAdd:query];
 
   if (status == errSecDuplicateItem) {
     NSMutableDictionary *updateQuery = [NSMutableDictionary dictionary];
     updateQuery[(__bridge id)kSecValueData] = data;
 
-    status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)updateQuery);
+    status = [[LUKeychainServices keychainServices] secItemUpdate:query updateQuery:updateQuery];
   }
 
   if (status != noErr) {
@@ -192,7 +193,7 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 
 - (void)deleteObjectForKey:(NSString *)key {
   NSMutableDictionary *query = [self queryDictionaryForKey:key];
-  OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
+  OSStatus status = [[LUKeychainServices keychainServices] secItemDelete:query];
 
   if (status != noErr) {
     self.lastError = [self errorFromOSStatus:status];

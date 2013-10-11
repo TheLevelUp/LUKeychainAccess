@@ -1,12 +1,29 @@
 #import "Kiwi.h"
 #import "LUKeychainAccess.h"
+#import "LUKeychainServices.h"
 
 SPEC_BEGIN(LUKeychainAccessSpec)
 
 describe(@"LUKeychainAccess", ^{
   __block LUKeychainAccess *keychainAccess;
+  __block LUKeychainAccess *keychainServices;
+
+  // Helpers
+  OSStatus error = errSecInteractionNotAllowed;
+  void (^itShouldSetLastError)(void (^)(void)) = ^(void (^blockToRun)(void)) {
+    it(@"sets lastError", ^{
+      blockToRun();
+
+      NSError *lastError = [keychainAccess lastError];
+      [[lastError shouldNot] beNil];
+      [[theValue(lastError.code) should] equal:theValue(error)];
+    });
+  };
 
   beforeEach(^{
+    keychainServices = [LUKeychainServices mock];
+    [LUKeychainServices stub:@selector(keychainServices) andReturn:keychainServices];
+
     keychainAccess = [LUKeychainAccess standardKeychainAccess];
   });
 
@@ -27,17 +44,23 @@ describe(@"LUKeychainAccess", ^{
 
   describe(@"deleteAll", ^{
     beforeEach(^{
-      [keychainAccess setBool:YES forKey:@"boolTest"];
-      [keychainAccess setString:@"test string" forKey:@"stringTest"];
-      [keychainAccess setObject:@[@1, @2] forKey:@"objectTest"];
+      [keychainServices stub:@selector(secItemDelete:)];
     });
 
-    it(@"deletes all objects stored in the Keychain", ^{
-      [keychainAccess deleteAll];
+    it(@"deletes all items from the keychain", ^{
+      [[[keychainServices should] receive] secItemDelete:@{(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword}];
 
-      [[theValue([keychainAccess boolForKey:@"boolTest"]) should] beNo];
-      [[keychainAccess stringForKey:@"stringTest"] shouldBeNil];
-      [[keychainAccess objectForKey:@"objectTest"] shouldBeNil];
+      [keychainAccess deleteAll];
+    });
+
+    context(@"if the delete fails", ^{
+      beforeEach(^{
+        [keychainServices stub:@selector(secItemDelete:) andReturn:theValue(error)];
+      });
+
+      itShouldSetLastError(^{
+        [keychainAccess deleteAll];
+      });
     });
   });
 
@@ -68,32 +91,32 @@ describe(@"LUKeychainAccess", ^{
   });
 
   describe(@"dataForKey:", ^{
-    NSData *testData = [@"testData" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *expectedResult = [@"value" dataUsingEncoding:NSUTF8StringEncoding];
     NSString *key = @"dataTest";
 
-    beforeEach(^{
-      NSMutableDictionary *query = [NSMutableDictionary dictionary];
-      query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
-
-      NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
-      query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
-      query[(__bridge id)kSecValueData] = testData;
-
-      SecItemAdd((__bridge CFDictionaryRef)query, NULL);
-    });
-
-    afterEach(^{
-      NSMutableDictionary *query = [NSMutableDictionary dictionary];
-      query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
-
-      NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
-      query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
-
-      SecItemDelete((__bridge CFDictionaryRef)query);
-    });
-
     it(@"returns the data stored in keychain at the key", ^{
-      [[[keychainAccess dataForKey:key] should] equal:testData];
+      [keychainServices stub:@selector(secItemCopyMatching:result:) withBlock:^id(NSArray *params) {
+        NSDictionary *query = params[0];
+        [[query[(__bridge id)kSecAttrAccount] should] equal:[key dataUsingEncoding:NSUTF8StringEncoding]];
+
+        __weak id *result;
+        [(NSValue *)params[1] getValue:&result];
+        *result = expectedResult;
+
+        return nil;
+      }];
+
+      [[[keychainAccess dataForKey:key] should] equal:expectedResult];
+    });
+
+    context(@"if the services command fails", ^{
+      beforeEach(^{
+        [keychainServices stub:@selector(secItemCopyMatching:result:) andReturn:theValue(error)];
+      });
+
+      itShouldSetLastError(^{
+        [keychainAccess dataForKey:key];
+      });
     });
   });
 
@@ -150,22 +173,36 @@ describe(@"LUKeychainAccess", ^{
 
       [[[keychainAccess objectForKey:key] should] equal:testObject];
     });
+
+    context(@"if the unarchive fails", ^{
+      beforeEach(^{
+        int zero = 0;
+        [[keychainAccess stubAndReturn:[NSData dataWithBytes:&zero length:sizeof(zero)]] dataForKey:key];
+      });
+
+      it(@"should not raise", ^{
+        [[theBlock(^{
+          [keychainAccess objectForKey:key];
+        }) shouldNot] raise];
+      });
+
+      it(@"sets lastError", ^{
+        [keychainAccess objectForKey:key];
+
+        NSError *error = [keychainAccess lastError];
+        [[error shouldNot] beNil];
+        [[theValue(error.code) should] equal:theValue(LUKeychainAccessInvalidArchiveError)];
+      });
+    });
   });
 
   // Setters
 
   describe(@"registerDefaults:", ^{
-    NSDictionary *existingDefaults = @{@"existingKey" : @"existingValue"};
-    NSArray *newDefaultKeys = @[@"newKey", @"foo", @"bar"];
-
     beforeEach(^{
-      for (NSString *newKey in newDefaultKeys) {
-        [keychainAccess setObject:nil forKey:newKey];
-      }
-
-      for (NSString *key in [existingDefaults allKeys]) {
-        [[keychainAccess stubAndReturn:existingDefaults[key]] objectForKey:key];
-      }
+      [keychainAccess stub:@selector(objectForKey:)];
+      [keychainAccess stub:@selector(setString:forKey:)];
+      [keychainAccess stub:@selector(setObject:forKey:)];
     });
 
     it(@"sets strings using setString: instead of setObject:", ^{
@@ -180,6 +217,9 @@ describe(@"LUKeychainAccess", ^{
     });
 
     it(@"doesn't overwrite existing values", ^{
+      [keychainAccess clearStubs];
+      [[keychainAccess stubAndReturn:@"existingValue"] objectForKey:@"existingKey"];
+
       [[[keychainAccess shouldNot] receive] setObject:@YES forKey:@"existingKey"];
       [keychainAccess registerDefaults:@{@"existingKey" : @YES}];
     });
@@ -208,66 +248,67 @@ describe(@"LUKeychainAccess", ^{
   });
 
   describe(@"setData:forKey:", ^{
-    NSData *testData = [@"testData" dataUsingEncoding:NSUTF8StringEncoding];
     NSString *key = @"dataTest";
 
     context(@"when the data is nil", ^{
-      beforeEach(^{
-        NSMutableDictionary *query = [NSMutableDictionary dictionary];
-        query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
-
-        NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
-        query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
-        query[(__bridge id)kSecValueData] = testData;
-
-        SecItemAdd((__bridge CFDictionaryRef)query, NULL);
-      });
-
       it(@"deletes the data at the key", ^{
+        [keychainServices stub:@selector(secItemDelete:) withBlock:^id(NSArray *params) {
+          NSDictionary *query = params[0];
+          [[query[(__bridge id)kSecAttrAccount] should] equal:[key dataUsingEncoding:NSUTF8StringEncoding]];
+
+          return nil;
+        }];
+        [[keychainServices should] receive:@selector(secItemDelete:)];
+
         [keychainAccess setData:nil forKey:key];
-
-        NSMutableDictionary *query = [NSMutableDictionary dictionary];
-        query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
-
-        NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
-        query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
-        query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitOne;
-        query[(__bridge id)kSecReturnData] = (__bridge id)kCFBooleanTrue;
-
-        CFTypeRef result;
-        OSStatus error = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
-
-        [[theValue(error) should] equal:theValue(errSecItemNotFound)];
       });
     });
 
     context(@"when the data is non-nil", ^{
-      it(@"stores the data in the keychain", ^{
+      NSData *testData = [@"testData" dataUsingEncoding:NSUTF8StringEncoding];
+
+      it(@"attempts to add the data to the Keychain", ^{
+        [keychainServices stub:@selector(secItemAdd:) withBlock:^id(NSArray *params) {
+          NSDictionary *query = params[0];
+          [[query[(__bridge id)kSecAttrAccount] should] equal:[key dataUsingEncoding:NSUTF8StringEncoding]];
+          [[query[(__bridge id)kSecValueData] should] equal:testData];
+
+          return nil;
+        }];
+        [[keychainServices should] receive:@selector(secItemAdd:)];
+
         [keychainAccess setData:testData forKey:key];
-
-        NSMutableDictionary *query = [NSMutableDictionary dictionary];
-        query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
-
-        NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
-        query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
-        query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitOne;
-        query[(__bridge id)kSecReturnData] = (__bridge id)kCFBooleanTrue;
-
-        CFTypeRef result;
-        SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
-        NSData *resultData = (__bridge NSData *)result;
-
-        [[resultData should] equal:testData];
       });
 
-      afterEach(^{
-        NSMutableDictionary *query = [NSMutableDictionary dictionary];
-        query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
+      context(@"when the item already exists in the keychain", ^{
+        beforeEach(^{
+          [keychainServices stub:@selector(secItemAdd:) andReturn:theValue(errSecDuplicateItem)];
+        });
 
-        NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
-        query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
+        it(@"updates the item with the new value", ^{
+          [keychainServices stub:@selector(secItemUpdate:updateQuery:) withBlock:^id(NSArray *params) {
+            NSDictionary *query = params[0];
+            [[query[(__bridge id)kSecAttrAccount] should] equal:[key dataUsingEncoding:NSUTF8StringEncoding]];
 
-        SecItemDelete((__bridge CFDictionaryRef)query);
+            NSDictionary *updateQuery = params[1];
+            [[updateQuery[(__bridge id)kSecValueData] should] equal:testData];
+
+            return nil;
+          }];
+          [[keychainServices should] receive:@selector(secItemUpdate:updateQuery:)];
+
+          [keychainAccess setData:testData forKey:key];
+        });
+      });
+
+      context(@"if a services command fails", ^{
+        beforeEach(^{
+          [keychainServices stub:@selector(secItemAdd:) andReturn:theValue(error)];
+        });
+
+        itShouldSetLastError(^{
+          [keychainAccess setData:testData forKey:key];
+        });
       });
     });
   });

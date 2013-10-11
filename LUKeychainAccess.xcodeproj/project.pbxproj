@@ -17,6 +17,7 @@
 		0226877116BAD99F008FC8FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226877016BAD99F008FC8FA /* Security.framework */; };
 		0226877216BAD9AC008FC8FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226877016BAD99F008FC8FA /* Security.framework */; };
 		0226877416BADA41008FC8FA /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226877316BADA41008FC8FA /* libPods-test.a */; };
+		028CCA2118084AAF00267911 /* LUKeychainServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CCA2018084AAF00267911 /* LUKeychainServices.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		0226877016BAD99F008FC8FA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0226877316BADA41008FC8FA /* libPods-test.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-test.a"; path = "Pods/build/Release-iphoneos/libPods-test.a"; sourceTree = "<group>"; };
 		028518F716BADB90000C43F0 /* Pods-test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Pods-test.xcconfig"; path = "Pods/Pods-test.xcconfig"; sourceTree = "<group>"; };
+		028CCA1F18084AAF00267911 /* LUKeychainServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUKeychainServices.h; sourceTree = "<group>"; };
+		028CCA2018084AAF00267911 /* LUKeychainServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainServices.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 			children = (
 				0226874A16BAD892008FC8FA /* LUKeychainAccess.h */,
 				0226874C16BAD892008FC8FA /* LUKeychainAccess.m */,
+				028CCA1F18084AAF00267911 /* LUKeychainServices.h */,
+				028CCA2018084AAF00267911 /* LUKeychainServices.m */,
 				0226874816BAD892008FC8FA /* Supporting Files */,
 			);
 			path = LUKeychainAccess;
@@ -239,6 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				028CCA2118084AAF00267911 /* LUKeychainServices.m in Sources */,
 				0226874D16BAD892008FC8FA /* LUKeychainAccess.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
