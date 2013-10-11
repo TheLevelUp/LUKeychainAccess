@@ -1,3 +1,5 @@
+#import "LUKeychainErrorHandler.h"
+
 extern NSString *LUKeychainAccessErrorDomain;
 
 typedef NS_ENUM(NSInteger, LUKeychainAccessError) {
@@ -16,14 +18,11 @@ typedef NS_ENUM(NSInteger, LUKeychainAccessAccessibility) {
 @interface LUKeychainAccess : NSObject
 
 @property (nonatomic, assign) LUKeychainAccessAccessibility accessibilityState;
+@property (nonatomic, strong) id<LUKeychainErrorHandler> errorHandler;
 
 // Public Methods
 + (LUKeychainAccess *)standardKeychainAccess;
 - (BOOL)deleteAll;
-
-// Error Handling
-- (void)clearLastError;
-- (NSError *)lastError;
 
 // Getters
 - (BOOL)boolForKey:(NSString *)key;

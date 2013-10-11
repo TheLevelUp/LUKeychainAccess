@@ -5,7 +5,7 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 
 @interface LUKeychainAccess ()
 
-@property (nonatomic, strong) NSError *lastError;
+@property (nonatomic, strong) LUKeychainServices *keychainServices;
 
 @end
 
@@ -21,28 +21,31 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   self = [super init];
   if (!self) return nil;
 
-  _accessibilityState = LUKeychainAccessAttrAccessibleWhenUnlocked;
+  _keychainServices = [LUKeychainServices keychainServices];
 
   return self;
 }
 
 - (BOOL)deleteAll {
-  NSMutableDictionary *query = [NSMutableDictionary dictionary];
-  query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
-  OSStatus status = [[LUKeychainServices keychainServices] secItemDelete:query];
+  NSError *error;
+  BOOL result = [self.keychainServices deleteAllItemsWithError:&error];
 
-  if (status != noErr) {
-    self.lastError = [self errorFromOSStatus:status];
+  if (!result) {
+    [self handleError:error];
     return NO;
   }
 
   return YES;
 }
 
-#pragma mark - Error Handling
+#pragma mark - Properties
 
-- (void)clearLastError {
-  self.lastError = nil;
+- (LUKeychainAccessAccessibility)accessibilityState {
+  return self.keychainServices.accessibilityState;
+}
+
+- (void)setAccessibilityState:(LUKeychainAccessAccessibility)accessibilityState {
+  self.keychainServices.accessibilityState = accessibilityState;
 }
 
 #pragma mark - Getters
@@ -52,19 +55,15 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 }
 
 - (NSData *)dataForKey:(NSString *)key {
-  NSMutableDictionary *query = [self queryDictionaryForKey:key];
-  query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitOne;
-  query[(__bridge id)kSecReturnData] = (__bridge id)kCFBooleanTrue;
+  NSError *error;
+  NSData *data = [self.keychainServices dataForKey:key error:&error];
 
-  id result;
-  OSStatus osError = [[LUKeychainServices keychainServices] secItemCopyMatching:query result:&result];
-
-  if (osError != noErr) {
-    self.lastError = [self errorFromOSStatus:osError];
+  if (!data) {
+    [self handleError:error];
     return nil;
   }
 
-  return result;
+  return data;
 }
 
 - (double)doubleForKey:(NSString *)key {
@@ -95,9 +94,11 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
       return [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }
   } @catch (NSException *e) {
-    self.lastError = [NSError errorWithDomain:LUKeychainAccessErrorDomain
+    NSString *errorMessage = [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];
+    NSError *error = [NSError errorWithDomain:LUKeychainAccessErrorDomain
                                          code:LUKeychainAccessInvalidArchiveError
-                                     userInfo:@{NSLocalizedDescriptionKey: [e description]}];
+                                     userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+    [self handleError:error];
   }
 
   return nil;
@@ -127,20 +128,15 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
     return;
   }
 
-  NSMutableDictionary *query = [self queryDictionaryForKey:key];
-  query[(__bridge id)kSecValueData] = data;
-
-  OSStatus status = [[LUKeychainServices keychainServices] secItemAdd:query];
-
-  if (status == errSecDuplicateItem) {
-    NSMutableDictionary *updateQuery = [NSMutableDictionary dictionary];
-    updateQuery[(__bridge id)kSecValueData] = data;
-
-    status = [[LUKeychainServices keychainServices] secItemUpdate:query updateQuery:updateQuery];
+  NSError *error;
+  BOOL success = [self.keychainServices addData:data forKey:key error:&error];
+  if (!success && error.code == errSecDuplicateItem) {
+    error = nil;
+    success = [self.keychainServices updateData:data forKey:key error:&error];
   }
 
-  if (status != noErr) {
-    self.lastError = [self errorFromOSStatus:status];
+  if (!success) {
+    [self handleError:error];
   }
 }
 
@@ -166,91 +162,17 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 
 #pragma mark - Private Methods
 
-- (CFTypeRef)accessibilityStateCFType {
-  switch (self.accessibilityState) {
-    case LUKeychainAccessAttrAccessibleAfterFirstUnlock:
-      return kSecAttrAccessibleAfterFirstUnlock;
-
-    case LUKeychainAccessAttrAccessibleAfterFirstUnlockThisDeviceOnly:
-      return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly;
-
-    case LUKeychainAccessAttrAccessibleAlways:
-      return kSecAttrAccessibleAlways;
-
-    case LUKeychainAccessAttrAccessibleAlwaysThisDeviceOnly:
-      return kSecAttrAccessibleAlwaysThisDeviceOnly;
-
-    case LUKeychainAccessAttrAccessibleWhenUnlocked:
-      return kSecAttrAccessibleWhenUnlocked;
-
-    case LUKeychainAccessAttrAccessibleWhenUnlockedThisDeviceOnly:
-      return kSecAttrAccessibleWhenUnlockedThisDeviceOnly;
-
-    default:
-      return kSecAttrAccessibleWhenUnlocked;
-  }
-}
-
 - (void)deleteObjectForKey:(NSString *)key {
-  NSMutableDictionary *query = [self queryDictionaryForKey:key];
-  OSStatus status = [[LUKeychainServices keychainServices] secItemDelete:query];
-
-  if (status != noErr) {
-    self.lastError = [self errorFromOSStatus:status];
+  NSError *error;
+  if (![self.keychainServices deleteItemWithKey:key error:&error]) {
+    [self handleError:error];
   }
 }
 
-- (NSError *)errorFromOSStatus:(OSStatus)status {
-  return [NSError errorWithDomain:NSOSStatusErrorDomain
-                             code:status
-                         userInfo:@{NSLocalizedDescriptionKey : [self errorMessageFromOSStatus:status]}];
-}
-
-- (NSString *)errorMessageFromOSStatus:(OSStatus)status {
-  switch (status) {
-    case errSecUnimplemented:
-      return @"Function or operation not implemented.";
-
-    case errSecParam:
-      return @"One or more parameters passed to a function where not valid.";
-
-    case errSecAllocate:
-      return @"Failed to allocate memory.";
-
-    case errSecNotAvailable:
-      return @"No keychain is available. You may need to restart your computer.";
-
-    case errSecDuplicateItem:
-      return @"The specified item already exists in the keychain.";
-
-    case errSecItemNotFound:
-      return @"The specified item could not be found in the keychain.";
-
-    case errSecInteractionNotAllowed:
-      return @"User interaction is not allowed.";
-
-    case errSecDecode:
-      return @"Unable to decode the provided data.";
-
-    case errSecAuthFailed:
-      return @"The user name or passphrase you entered is not correct.";
-
-    default:
-      return @"No error.";
+- (void)handleError:(NSError *)error {
+  if (self.errorHandler) {
+    [self.errorHandler keychainAccess:self receivedError:error];
   }
-}
-
-- (NSMutableDictionary *)queryDictionaryForKey:(NSString *)key {
-  NSAssert(key != nil, @"A non-nil key must be provided.");
-
-  NSMutableDictionary *query = [NSMutableDictionary dictionary];
-  query[(__bridge id)kSecClass] = (__bridge id)kSecClassGenericPassword;
-  query[(__bridge id)kSecAttrAccessible] = (__bridge id)[self accessibilityStateCFType];
-
-  NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
-  query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
-  
-  return query;
 }
 
 @end

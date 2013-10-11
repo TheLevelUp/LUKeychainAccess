@@ -36,7 +36,7 @@ The default value is `LUKeychainAccessAttrAccessibleWhenUnlocked`.
 
 ## Error Handling
 
-When an error occurs, `lastError` will be set to an appropriate NSError instance. The method `clearLastError` can be called to set this to `nil`.
+An instance of `LUKeychainAccess` may be optionally given a error handler, which can be any object that implements the `LUTestErrorHandler` protocol. This error handler will be notified if an error occurs.
 
 ## Requirements
 

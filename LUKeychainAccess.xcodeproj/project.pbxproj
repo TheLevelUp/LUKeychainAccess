@@ -17,7 +17,9 @@
 		0226877116BAD99F008FC8FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226877016BAD99F008FC8FA /* Security.framework */; };
 		0226877216BAD9AC008FC8FA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226877016BAD99F008FC8FA /* Security.framework */; };
 		0226877416BADA41008FC8FA /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226877316BADA41008FC8FA /* libPods-test.a */; };
+		02757704180892C1008B3C12 /* LUKeychainServicesSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 02757702180892B1008B3C12 /* LUKeychainServicesSpec.m */; };
 		028CCA2118084AAF00267911 /* LUKeychainServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CCA2018084AAF00267911 /* LUKeychainServices.m */; };
+		02ABC53418087D9100A13931 /* LUTestErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 02ABC53318087D9100A13931 /* LUTestErrorHandler.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,9 +56,13 @@
 		0226876E16BAD991008FC8FA /* LUKeychainAccessSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainAccessSpec.m; sourceTree = "<group>"; };
 		0226877016BAD99F008FC8FA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0226877316BADA41008FC8FA /* libPods-test.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-test.a"; path = "Pods/build/Release-iphoneos/libPods-test.a"; sourceTree = "<group>"; };
+		02757702180892B1008B3C12 /* LUKeychainServicesSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainServicesSpec.m; sourceTree = "<group>"; };
 		028518F716BADB90000C43F0 /* Pods-test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Pods-test.xcconfig"; path = "Pods/Pods-test.xcconfig"; sourceTree = "<group>"; };
 		028CCA1F18084AAF00267911 /* LUKeychainServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUKeychainServices.h; sourceTree = "<group>"; };
 		028CCA2018084AAF00267911 /* LUKeychainServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainServices.m; sourceTree = "<group>"; };
+		02ABC53118087D0100A13931 /* LUKeychainErrorHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LUKeychainErrorHandler.h; sourceTree = "<group>"; };
+		02ABC53218087D9100A13931 /* LUTestErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUTestErrorHandler.h; sourceTree = "<group>"; };
+		02ABC53318087D9100A13931 /* LUTestErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUTestErrorHandler.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +129,7 @@
 			children = (
 				0226874A16BAD892008FC8FA /* LUKeychainAccess.h */,
 				0226874C16BAD892008FC8FA /* LUKeychainAccess.m */,
+				02ABC53118087D0100A13931 /* LUKeychainErrorHandler.h */,
 				028CCA1F18084AAF00267911 /* LUKeychainServices.h */,
 				028CCA2018084AAF00267911 /* LUKeychainServices.m */,
 				0226874816BAD892008FC8FA /* Supporting Files */,
@@ -142,6 +149,9 @@
 			isa = PBXGroup;
 			children = (
 				0226876E16BAD991008FC8FA /* LUKeychainAccessSpec.m */,
+				02757702180892B1008B3C12 /* LUKeychainServicesSpec.m */,
+				02ABC53218087D9100A13931 /* LUTestErrorHandler.h */,
+				02ABC53318087D9100A13931 /* LUTestErrorHandler.m */,
 			);
 			name = "Unit Tests";
 			path = "Unit-Tests";
@@ -253,7 +263,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02ABC53418087D9100A13931 /* LUTestErrorHandler.m in Sources */,
 				0226876F16BAD991008FC8FA /* LUKeychainAccessSpec.m in Sources */,
+				02757704180892C1008B3C12 /* LUKeychainServicesSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

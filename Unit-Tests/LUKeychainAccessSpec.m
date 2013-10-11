@@ -1,30 +1,32 @@
 #import "Kiwi.h"
 #import "LUKeychainAccess.h"
 #import "LUKeychainServices.h"
+#import "LUTestErrorHandler.h"
 
 SPEC_BEGIN(LUKeychainAccessSpec)
 
 describe(@"LUKeychainAccess", ^{
   __block LUKeychainAccess *keychainAccess;
-  __block LUKeychainAccess *keychainServices;
+  __block LUKeychainServices *keychainServices;
+  __block LUTestErrorHandler *errorHandler;
 
   // Helpers
-  OSStatus error = errSecInteractionNotAllowed;
-  void (^itShouldSetLastError)(void (^)(void)) = ^(void (^blockToRun)(void)) {
-    it(@"sets lastError", ^{
-      blockToRun();
+  id (^errorReturningBlock)(NSArray *) = ^id(NSArray *params) {
+    __autoreleasing NSError **error;
+    [(NSValue *)[params lastObject] getValue:&error];
+    *error = [NSError errorWithDomain:LUKeychainAccessErrorDomain code:errSecDuplicateItem userInfo:nil];
 
-      NSError *lastError = [keychainAccess lastError];
-      [[lastError shouldNot] beNil];
-      [[theValue(lastError.code) should] equal:theValue(error)];
-    });
+    return [KWValue valueWithBool:NO];
   };
 
   beforeEach(^{
+    errorHandler = [[LUTestErrorHandler alloc] init];
+
     keychainServices = [LUKeychainServices mock];
     [LUKeychainServices stub:@selector(keychainServices) andReturn:keychainServices];
 
     keychainAccess = [LUKeychainAccess standardKeychainAccess];
+    keychainAccess.errorHandler = errorHandler;
   });
 
   // Public Methods
@@ -43,37 +45,22 @@ describe(@"LUKeychainAccess", ^{
   });
 
   describe(@"deleteAll", ^{
-    beforeEach(^{
-      [keychainServices stub:@selector(secItemDelete:)];
-    });
-
     it(@"deletes all items from the keychain", ^{
-      [[[keychainServices should] receive] secItemDelete:@{(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword}];
+      [[keychainServices should] receive:@selector(deleteAllItemsWithError:)];
 
       [keychainAccess deleteAll];
     });
 
     context(@"if the delete fails", ^{
       beforeEach(^{
-        [keychainServices stub:@selector(secItemDelete:) andReturn:theValue(error)];
+        [keychainServices stub:@selector(deleteAllItemsWithError:) withBlock:errorReturningBlock];
       });
 
-      itShouldSetLastError(^{
+      it(@"notifies the error handler", ^{
         [keychainAccess deleteAll];
+
+        [[errorHandler.lastError shouldNot] beNil];
       });
-    });
-  });
-
-  // Error Handling
-
-  describe(@"clearLastError", ^{
-    it(@"clears lastError", ^{
-      [keychainAccess setValue:[NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:nil]
-                        forKey:@"lastError"];
-
-      [keychainAccess clearLastError];
-
-      [[keychainAccess lastError] shouldBeNil];
     });
   });
 
@@ -95,27 +82,23 @@ describe(@"LUKeychainAccess", ^{
     NSString *key = @"dataTest";
 
     it(@"returns the data stored in keychain at the key", ^{
-      [keychainServices stub:@selector(secItemCopyMatching:result:) withBlock:^id(NSArray *params) {
-        NSDictionary *query = params[0];
-        [[query[(__bridge id)kSecAttrAccount] should] equal:[key dataUsingEncoding:NSUTF8StringEncoding]];
-
-        __weak id *result;
-        [(NSValue *)params[1] getValue:&result];
-        *result = expectedResult;
-
-        return nil;
-      }];
+      [[keychainServices should] receive:@selector(dataForKey:error:) andReturn:expectedResult withArguments:key, any()];
 
       [[[keychainAccess dataForKey:key] should] equal:expectedResult];
     });
 
     context(@"if the services command fails", ^{
       beforeEach(^{
-        [keychainServices stub:@selector(secItemCopyMatching:result:) andReturn:theValue(error)];
+        [keychainServices stub:@selector(dataForKey:error:) withBlock:^id(NSArray *params) {
+          errorReturningBlock(params);
+          return nil;
+        }];
       });
 
-      itShouldSetLastError(^{
+      it(@"notifies the error handler", ^{
         [keychainAccess dataForKey:key];
+
+        [[errorHandler.lastError shouldNot] beNil];
       });
     });
   });
@@ -186,10 +169,10 @@ describe(@"LUKeychainAccess", ^{
         }) shouldNot] raise];
       });
 
-      it(@"sets lastError", ^{
+      it(@"notifies the error handler", ^{
         [keychainAccess objectForKey:key];
 
-        NSError *error = [keychainAccess lastError];
+        NSError *error = [errorHandler lastError];
         [[error shouldNot] beNil];
         [[theValue(error.code) should] equal:theValue(LUKeychainAccessInvalidArchiveError)];
       });
@@ -252,13 +235,7 @@ describe(@"LUKeychainAccess", ^{
 
     context(@"when the data is nil", ^{
       it(@"deletes the data at the key", ^{
-        [keychainServices stub:@selector(secItemDelete:) withBlock:^id(NSArray *params) {
-          NSDictionary *query = params[0];
-          [[query[(__bridge id)kSecAttrAccount] should] equal:[key dataUsingEncoding:NSUTF8StringEncoding]];
-
-          return nil;
-        }];
-        [[keychainServices should] receive:@selector(secItemDelete:)];
+        [[keychainServices should] receive:@selector(deleteItemWithKey:error:) withArguments:key, any()];
 
         [keychainAccess setData:nil forKey:key];
       });
@@ -268,46 +245,32 @@ describe(@"LUKeychainAccess", ^{
       NSData *testData = [@"testData" dataUsingEncoding:NSUTF8StringEncoding];
 
       it(@"attempts to add the data to the Keychain", ^{
-        [keychainServices stub:@selector(secItemAdd:) withBlock:^id(NSArray *params) {
-          NSDictionary *query = params[0];
-          [[query[(__bridge id)kSecAttrAccount] should] equal:[key dataUsingEncoding:NSUTF8StringEncoding]];
-          [[query[(__bridge id)kSecValueData] should] equal:testData];
-
-          return nil;
-        }];
-        [[keychainServices should] receive:@selector(secItemAdd:)];
+        [[keychainServices should] receive:@selector(addData:forKey:error:) withArguments:testData, key, any()];
 
         [keychainAccess setData:testData forKey:key];
       });
 
       context(@"when the item already exists in the keychain", ^{
         beforeEach(^{
-          [keychainServices stub:@selector(secItemAdd:) andReturn:theValue(errSecDuplicateItem)];
+          [keychainServices stub:@selector(addData:forKey:error:) withBlock:errorReturningBlock];
         });
 
         it(@"updates the item with the new value", ^{
-          [keychainServices stub:@selector(secItemUpdate:updateQuery:) withBlock:^id(NSArray *params) {
-            NSDictionary *query = params[0];
-            [[query[(__bridge id)kSecAttrAccount] should] equal:[key dataUsingEncoding:NSUTF8StringEncoding]];
-
-            NSDictionary *updateQuery = params[1];
-            [[updateQuery[(__bridge id)kSecValueData] should] equal:testData];
-
-            return nil;
-          }];
-          [[keychainServices should] receive:@selector(secItemUpdate:updateQuery:)];
+          [[keychainServices should] receive:@selector(updateData:forKey:error:) withArguments:testData, key, any()];
 
           [keychainAccess setData:testData forKey:key];
         });
-      });
 
-      context(@"if a services command fails", ^{
-        beforeEach(^{
-          [keychainServices stub:@selector(secItemAdd:) andReturn:theValue(error)];
-        });
+        context(@"if the services command fails", ^{
+          beforeEach(^{
+            [keychainServices stub:@selector(updateData:forKey:error:) withBlock:errorReturningBlock];
+          });
 
-        itShouldSetLastError(^{
-          [keychainAccess setData:testData forKey:key];
+          it(@"notifies the error handler", ^{
+            [keychainAccess setData:testData forKey:key];
+
+            [[errorHandler.lastError shouldNot] beNil];
+          });
         });
       });
     });
