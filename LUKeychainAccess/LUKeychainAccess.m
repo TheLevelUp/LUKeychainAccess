@@ -54,32 +54,56 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   return [[self objectForKey:key] boolValue];
 }
 
+- (BOOL)boolForKey:(NSString *)key service:(NSString*)service {
+    return [[self objectForKey:key service:service] boolValue];
+}
+
 - (NSData *)dataForKey:(NSString *)key {
-  NSError *error;
-  NSData *data = [self.keychainServices dataForKey:key error:&error];
+    return [self dataForKey:key service:nil];
+}
 
-  if (!data) {
-    [self handleError:error];
-    return nil;
-  }
+- (NSData *)dataForKey:(NSString *)key service:(NSString*)service {
+    NSError *error;
+    NSData *data = [self.keychainServices dataForKey:key error:&error];
 
-  return data;
+    if (!data) {
+        [self handleError:error];
+        return nil;
+    }
+
+    return data;
 }
 
 - (double)doubleForKey:(NSString *)key {
-  return [[self objectForKey:key] doubleValue];
+  return [self doubleForKey:key service:nil];
+}
+
+- (double)doubleForKey:(NSString *)key service:(NSString*)service {
+    return [[self objectForKey:key service:service] doubleValue];
 }
 
 - (float)floatForKey:(NSString *)key {
-  return [[self objectForKey:key] floatValue];
+  return [self floatForKey:key service:nil];
+}
+
+- (float)floatForKey:(NSString *)key service:(NSString*)service {
+    return [[self objectForKey:key service:service] floatValue];
 }
 
 - (NSInteger)integerForKey:(NSString *)key {
-  return [[self objectForKey:key] integerValue];
+  return [self integerForKey:key service:nil];
+}
+
+- (NSInteger)integerForKey:(NSString *)key service:(NSString*)service {
+    return [[self objectForKey:key service:service] integerValue];
 }
 
 - (NSString *)stringForKey:(NSString *)key {
-  NSData *data = [self dataForKey:key];
+    return [self stringForKey:key service:nil];
+}
+
+- (NSString *)stringForKey:(NSString *)key service:(NSString*)service {
+  NSData *data = [self dataForKey:key service:service];
 
   if (!data) return nil;
 
@@ -87,21 +111,25 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 }
 
 - (id)objectForKey:(NSString *)key {
-  NSData *data = [self dataForKey:key];
+  return [self objectForKey:key service:nil];
+}
 
-  @try {
-    if (data) {
-      return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+- (id)objectForKey:(NSString *)key service:(NSString*)service {
+    NSData *data = [self dataForKey:key service:service];
+
+    @try {
+        if (data) {
+            return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        }
+    } @catch (NSException *e) {
+        NSString *errorMessage = [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];
+        NSError *error = [NSError errorWithDomain:LUKeychainAccessErrorDomain
+                                             code:LUKeychainAccessInvalidArchiveError
+                                         userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+        [self handleError:error];
     }
-  } @catch (NSException *e) {
-    NSString *errorMessage = [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];
-    NSError *error = [NSError errorWithDomain:LUKeychainAccessErrorDomain
-                                         code:LUKeychainAccessInvalidArchiveError
-                                     userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
-    [self handleError:error];
-  }
 
-  return nil;
+    return nil;
 }
 
 #pragma mark - Setters
@@ -119,54 +147,86 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 }
 
 - (void)setBool:(BOOL)value forKey:(NSString *)key {
-  [self setObject:@(value) forKey:key];
+    [self setBool:value forKey:key service:nil];
+}
+
+- (void)setBool:(BOOL)value forKey:(NSString *)key service:(NSString*)service {
+    [self setObject:@(value) forKey:key service:service];
 }
 
 - (void)setData:(NSData *)data forKey:(NSString *)key {
-  if (!data) {
-    [self deleteObjectForKey:key];
-    return;
-  }
+    [self setData:data forKey:key service:nil];
+}
 
-  NSError *error;
-  BOOL success = [self.keychainServices addData:data forKey:key error:&error];
-  if (!success && error.code == errSecDuplicateItem) {
-    error = nil;
-    success = [self.keychainServices updateData:data forKey:key error:&error];
-  }
+- (void)setData:(NSData *)data forKey:(NSString *)key service:(NSString*)service {
+    if (!data) {
+        [self deleteObjectForKey:key service:service];
+        return;
+    }
 
-  if (!success) {
-    [self handleError:error];
-  }
+    NSError *error;
+    BOOL success = [self.keychainServices addData:data forKey:key error:&error];
+    if (!success && error.code == errSecDuplicateItem) {
+        error = nil;
+        success = [self.keychainServices updateData:data forKey:key error:&error];
+    }
+
+    if (!success) {
+        [self handleError:error];
+    }
 }
 
 - (void)setDouble:(double)value forKey:(NSString *)key {
-  [self setObject:@(value) forKey:key];
+  [self setDouble:value forKey:key service:nil];
+}
+
+- (void)setDouble:(double)value forKey:(NSString *)key service:(NSString*)service {
+  [self setObject:@(value) forKey:key service:service];
 }
 
 - (void)setFloat:(float)value forKey:(NSString *)key {
-  [self setObject:@(value) forKey:key];
+  [self setFloat:value forKey:key service:nil];
+}
+
+- (void)setFloat:(float)value forKey:(NSString *)key service:(NSString*)service {
+  [self setObject:@(value) forKey:key service:service];
 }
 
 - (void)setInteger:(NSInteger)value forKey:(NSString *)key {
-  [self setObject:@(value) forKey:key];
+  [self setInteger:value forKey:key service:nil];
+}
+
+- (void)setInteger:(NSInteger)value forKey:(NSString *)key service:(NSString*)service {
+  [self setObject:@(value) forKey:key service:service];
 }
 
 - (void)setString:(NSString *)inputString forKey:(NSString *)key {
-  [self setData:[inputString dataUsingEncoding:NSUTF8StringEncoding] forKey:key];
+  [self setString:inputString forKey:key service:nil];
+}
+
+- (void)setString:(NSString *)inputString forKey:(NSString *)key service:(NSString*)service {
+  [self setData:[inputString dataUsingEncoding:NSUTF8StringEncoding] forKey:key service:service];
 }
 
 - (void)setObject:(id)value forKey:(NSString *)key {
-  [self setData:[NSKeyedArchiver archivedDataWithRootObject:value] forKey:key];
+    [self setObject:value forKey:key service:nil];
+}
+
+- (void)setObject:(id)value forKey:(NSString *)key service:(NSString*)service {
+    [self setData:[NSKeyedArchiver archivedDataWithRootObject:value] forKey:key service:service];
 }
 
 #pragma mark - Private Methods
 
 - (void)deleteObjectForKey:(NSString *)key {
-  NSError *error;
-  if (![self.keychainServices deleteItemWithKey:key error:&error]) {
-    [self handleError:error];
-  }
+    [self deleteObjectForKey:key service:nil];
+}
+
+- (void)deleteObjectForKey:(NSString *)key service:(NSString*)service {
+    NSError *error;
+    if (![self.keychainServices deleteItemWithKey:key service:service error:&error]) {
+        [self handleError:error];
+    }
 }
 
 - (void)handleError:(NSError *)error {
