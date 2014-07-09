@@ -16,34 +16,42 @@
 }
 
 - (BOOL)addData:(NSData *)data forKey:(NSString *)key error:(NSError **)error {
-  NSMutableDictionary *query = [self queryDictionaryForKey:key];
-  query[(__bridge id)kSecValueData] = data;
+  return [self addData:data forKey:key service:nil error:error];
+}
 
-  OSStatus status = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
-  if (status != noErr) {
-    if (error) *error = [self errorFromOSStatus:status descriptionFormat:@"SecItemAdd with key %@", key];
-    return NO;
-  }
+- (BOOL)addData:(NSData *)data forKey:(NSString *)key service:(NSString*)service error:(NSError **)error {
+    NSMutableDictionary *query = [self queryDictionaryForKey:key andService:service];
+    query[(__bridge id)kSecValueData] = data;
 
-  return YES;
+    OSStatus status = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
+    if (status != noErr) {
+        if (error) *error = [self errorFromOSStatus:status descriptionFormat:@"SecItemAdd with key %@", key];
+        return NO;
+    }
+
+    return YES;
 }
 
 - (NSData *)dataForKey:(NSString *)key error:(NSError **)error {
-  NSMutableDictionary *query = [self queryDictionaryForKey:key];
-  query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitOne;
-  query[(__bridge id)kSecReturnData] = (__bridge id)kCFBooleanTrue;
+  return [self dataForKey:key service:nil error:error];
+}
 
-  CFTypeRef cfResult;
-  OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &cfResult);
-  if (status != noErr) {
-    if (error) *error = [self errorFromOSStatus:status descriptionFormat:@"SecItemCopyMatching with key %@", key];
-    return nil;
-  }
+- (NSData *)dataForKey:(NSString *)key service:(NSString*)service error:(NSError **)error {
+    NSMutableDictionary *query = [self queryDictionaryForKey:key andService:service];
+    query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitOne;
+    query[(__bridge id)kSecReturnData] = (__bridge id)kCFBooleanTrue;
 
-  id data = CFBridgingRelease(cfResult);
-  if (![data isKindOfClass:[NSData class]]) return nil;
+    CFTypeRef cfResult;
+    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &cfResult);
+    if (status != noErr) {
+        if (error) *error = [self errorFromOSStatus:status descriptionFormat:@"SecItemCopyMatching with key %@", key];
+        return nil;
+    }
 
-  return data;
+    id data = CFBridgingRelease(cfResult);
+    if (![data isKindOfClass:[NSData class]]) return nil;
+
+    return data;
 }
 
 - (BOOL)deleteAllItemsWithError:(NSError **)error {
@@ -60,19 +68,27 @@
 }
 
 - (BOOL)deleteItemWithKey:(NSString *)key error:(NSError **)error {
-  NSMutableDictionary *query = [self queryDictionaryForKey:key];
+  return [self deleteItemWithKey:key service:nil error:error];
+}
 
-  OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
-  if (status != noErr) {
-    if (error) *error = [self errorFromOSStatus:status descriptionFormat:@"SecItemDelete with key %@", key];
-    return NO;
-  }
+- (BOOL)deleteItemWithKey:(NSString *)key service:(NSString*)service error:(NSError **)error {
+    NSMutableDictionary *query = [self queryDictionaryForKey:key andService:service];
 
-  return YES;
+    OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
+    if (status != noErr) {
+        if (error) *error = [self errorFromOSStatus:status descriptionFormat:@"SecItemDelete with key %@", key];
+        return NO;
+    }
+
+    return YES;
 }
 
 - (BOOL)updateData:(NSData *)data forKey:(NSString *)key error:(NSError **)error {
-  NSMutableDictionary *query = [self queryDictionaryForKey:key];
+    return [self updateData:data forKey:key service:nil error:error];
+}
+
+- (BOOL)updateData:(NSData *)data forKey:(NSString *)key service:(NSString*)service error:(NSError **)error {
+  NSMutableDictionary *query = [self queryDictionaryForKey:key andService:service];
   query[(__bridge id)kSecValueData] = data;
 
   NSMutableDictionary *updateQuery = [NSMutableDictionary dictionary];
@@ -162,7 +178,7 @@
   }
 }
 
-- (NSMutableDictionary *)queryDictionaryForKey:(NSString *)key {
+- (NSMutableDictionary *)queryDictionaryForKey:(NSString *)key andService:(NSString*)service {
   NSAssert(key != nil, @"A non-nil key must be provided.");
 
   NSMutableDictionary *query = [NSMutableDictionary dictionary];
@@ -170,6 +186,8 @@
 
   NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
   query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
+
+  if(service) query[(__bridge id)kSecAttrService] = service;
 
   return query;
 }

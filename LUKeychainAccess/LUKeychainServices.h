@@ -7,9 +7,13 @@
 
 + (instancetype)keychainServices;
 - (BOOL)addData:(NSData *)data forKey:(NSString *)key error:(NSError **)error;
+- (BOOL)addData:(NSData *)data forKey:(NSString *)key service:(NSString*)service error:(NSError **)error;
 - (NSData *)dataForKey:(NSString *)key error:(NSError **)error;
+- (NSData *)dataForKey:(NSString *)key service:(NSString*)service error:(NSError **)error;
 - (BOOL)deleteAllItemsWithError:(NSError **)error;
 - (BOOL)deleteItemWithKey:(NSString *)key error:(NSError **)error;
+- (BOOL)deleteItemWithKey:(NSString *)key service:(NSString*)service error:(NSError **)error;
 - (BOOL)updateData:(NSData *)data forKey:(NSString *)key error:(NSError **)error;
+- (BOOL)updateData:(NSData *)data forKey:(NSString *)key service:(NSString*)service error:(NSError **)error;
 
 @end
