@@ -171,6 +171,10 @@
   NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
   query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
 
+  if (self.service) {
+    query[(__bridge id)kSecAttrService] = self.service;
+  }
+
   return query;
 }
 

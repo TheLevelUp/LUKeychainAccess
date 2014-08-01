@@ -48,6 +48,14 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   self.keychainServices.accessibilityState = accessibilityState;
 }
 
+- (NSString *)service {
+  return self.keychainServices.service;
+}
+
+- (void)setService:(NSString *)service {
+  self.keychainServices.service = service;
+}
+
 #pragma mark - Getters
 
 - (BOOL)boolForKey:(NSString *)key {
