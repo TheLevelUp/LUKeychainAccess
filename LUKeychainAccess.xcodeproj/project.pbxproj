@@ -10,7 +10,6 @@
 		0226874616BAD892008FC8FA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226874516BAD892008FC8FA /* Foundation.framework */; };
 		0226874B16BAD892008FC8FA /* LUKeychainAccess.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0226874A16BAD892008FC8FA /* LUKeychainAccess.h */; };
 		0226874D16BAD892008FC8FA /* LUKeychainAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 0226874C16BAD892008FC8FA /* LUKeychainAccess.m */; };
-		0226875516BAD892008FC8FA /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226875416BAD892008FC8FA /* SenTestingKit.framework */; };
 		0226875816BAD892008FC8FA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226874516BAD892008FC8FA /* Foundation.framework */; };
 		0226875B16BAD892008FC8FA /* libLUKeychainAccess.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0226874216BAD892008FC8FA /* libLUKeychainAccess.a */; };
 		0226876F16BAD991008FC8FA /* LUKeychainAccessSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 0226876E16BAD991008FC8FA /* LUKeychainAccessSpec.m */; };
@@ -52,17 +51,18 @@
 		0226874A16BAD892008FC8FA /* LUKeychainAccess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LUKeychainAccess.h; sourceTree = "<group>"; };
 		0226874C16BAD892008FC8FA /* LUKeychainAccess.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LUKeychainAccess.m; sourceTree = "<group>"; };
 		0226875316BAD892008FC8FA /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0226875416BAD892008FC8FA /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		0226876E16BAD991008FC8FA /* LUKeychainAccessSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainAccessSpec.m; sourceTree = "<group>"; };
 		0226877016BAD99F008FC8FA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0226877316BADA41008FC8FA /* libPods-test.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-test.a"; path = "Pods/build/Release-iphoneos/libPods-test.a"; sourceTree = "<group>"; };
 		02757702180892B1008B3C12 /* LUKeychainServicesSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainServicesSpec.m; sourceTree = "<group>"; };
-		028518F716BADB90000C43F0 /* Pods-test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Pods-test.xcconfig"; path = "Pods/Pods-test.xcconfig"; sourceTree = "<group>"; };
 		028CCA1F18084AAF00267911 /* LUKeychainServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUKeychainServices.h; sourceTree = "<group>"; };
 		028CCA2018084AAF00267911 /* LUKeychainServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainServices.m; sourceTree = "<group>"; };
 		02ABC53118087D0100A13931 /* LUKeychainErrorHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LUKeychainErrorHandler.h; sourceTree = "<group>"; };
 		02ABC53218087D9100A13931 /* LUTestErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUTestErrorHandler.h; sourceTree = "<group>"; };
 		02ABC53318087D9100A13931 /* LUTestErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUTestErrorHandler.m; sourceTree = "<group>"; };
+		21D80151083ABFD1C71383C6 /* libPods-UnitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-UnitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		666BEC4EDA7D51370C0F76F5 /* Pods-test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.release.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.release.xcconfig"; sourceTree = "<group>"; };
+		F3AB6C26D5ACBCCA1BE08225 /* Pods-test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-test/Pods-test.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +81,6 @@
 			files = (
 				0226877416BADA41008FC8FA /* libPods-test.a in Frameworks */,
 				0226877216BAD9AC008FC8FA /* Security.framework in Frameworks */,
-				0226875516BAD892008FC8FA /* SenTestingKit.framework in Frameworks */,
 				0226875816BAD892008FC8FA /* Foundation.framework in Frameworks */,
 				0226875B16BAD892008FC8FA /* libLUKeychainAccess.a in Frameworks */,
 			);
@@ -97,7 +96,7 @@
 				0226876D16BAD991008FC8FA /* Unit Tests */,
 				0226874416BAD892008FC8FA /* Frameworks */,
 				0226874316BAD892008FC8FA /* Products */,
-				028518F716BADB90000C43F0 /* Pods-test.xcconfig */,
+				0AA66800453F85DEBB0E1DCB /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -118,8 +117,8 @@
 			children = (
 				0226874516BAD892008FC8FA /* Foundation.framework */,
 				0226877016BAD99F008FC8FA /* Security.framework */,
-				0226875416BAD892008FC8FA /* SenTestingKit.framework */,
 				0226877316BADA41008FC8FA /* libPods-test.a */,
+				21D80151083ABFD1C71383C6 /* libPods-UnitTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -157,6 +156,15 @@
 			path = "Unit-Tests";
 			sourceTree = "<group>";
 		};
+		0AA66800453F85DEBB0E1DCB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F3AB6C26D5ACBCCA1BE08225 /* Pods-test.debug.xcconfig */,
+				666BEC4EDA7D51370C0F76F5 /* Pods-test.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -181,10 +189,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0226876A16BAD892008FC8FA /* Build configuration list for PBXNativeTarget "UnitTests" */;
 			buildPhases = (
+				E6DEE3BF569723F8ADA12C27 /* Check Pods Manifest.lock */,
 				0226874E16BAD892008FC8FA /* Sources */,
 				0226874F16BAD892008FC8FA /* Frameworks */,
 				0226875016BAD892008FC8FA /* Resources */,
 				0226875116BAD892008FC8FA /* ShellScript */,
+				5F8F5DBC7BF5FC6AA600725F /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -194,7 +204,7 @@
 			name = UnitTests;
 			productName = LUKeychainAccessTests;
 			productReference = 0226875316BAD892008FC8FA /* UnitTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -202,6 +212,7 @@
 		0226873A16BAD892008FC8FA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0610;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = SCVNGR;
 			};
@@ -246,6 +257,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		5F8F5DBC7BF5FC6AA600725F /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-test/Pods-test-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E6DEE3BF569723F8ADA12C27 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -361,23 +402,21 @@
 		};
 		0226876B16BAD892008FC8FA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 028518F716BADB90000C43F0 /* Pods-test.xcconfig */;
+			baseConfigurationReference = F3AB6C26D5ACBCCA1BE08225 /* Pods-test.debug.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LUKeychainAccess/LUKeychainAccess-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
 		0226876C16BAD892008FC8FA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 028518F716BADB90000C43F0 /* Pods-test.xcconfig */;
+			baseConfigurationReference = 666BEC4EDA7D51370C0F76F5 /* Pods-test.release.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LUKeychainAccess/LUKeychainAccess-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

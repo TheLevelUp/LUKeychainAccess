@@ -71,7 +71,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the boolValue of the object stored at the key", ^{
       BOOL testBool = YES;
-      [[keychainAccess stubAndReturn:@(testBool)] objectForKey:key];
+      [keychainAccess stub:@selector(objectForKey:) andReturn:@(testBool) withArguments:key];
 
       [[theValue([keychainAccess boolForKey:key]) should] equal:theValue(testBool)];
     });
@@ -108,7 +108,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the doubleValue of the object stored at the key", ^{
       double testDouble = 123.0;
-      [[keychainAccess stubAndReturn:@(testDouble)] objectForKey:key];
+      [keychainAccess stub:@selector(objectForKey:) andReturn:@(testDouble) withArguments:key];
 
       [[theValue([keychainAccess doubleForKey:key]) should] equal:theValue(testDouble)];
     });
@@ -119,7 +119,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the floatValue of the object stored at the key", ^{
       float testFloat = 123.0;
-      [[keychainAccess stubAndReturn:@(testFloat)] objectForKey:key];
+      [keychainAccess stub:@selector(objectForKey:) andReturn:@(testFloat) withArguments:key];
 
       [[theValue([keychainAccess floatForKey:key]) should] equal:theValue(testFloat)];
     });
@@ -130,7 +130,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the integerValue of the object stored at the key", ^{
       NSInteger testInteger = 123;
-      [[keychainAccess stubAndReturn:@(testInteger)] objectForKey:key];
+      [keychainAccess stub:@selector(objectForKey:) andReturn:@(testInteger) withArguments:key];
 
       [[theValue([keychainAccess integerForKey:key]) should] equal:theValue(testInteger)];
     });
@@ -141,7 +141,9 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns a UTF-8 encoded string from the data stored at the key", ^{
       NSString *testString = @"testString";
-      [[keychainAccess stubAndReturn:[testString dataUsingEncoding:NSUTF8StringEncoding]] dataForKey:key];
+      [keychainAccess stub:@selector(dataForKey:)
+                 andReturn:[testString dataUsingEncoding:NSUTF8StringEncoding]
+             withArguments:key];
 
       [[[keychainAccess stringForKey:key] should] equal:testString];
     });
@@ -152,7 +154,9 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the unarchived object from the data stored at the key", ^{
       NSArray *testObject = @[@1, @2];
-      [[keychainAccess stubAndReturn:[NSKeyedArchiver archivedDataWithRootObject:testObject]] dataForKey:key];
+      [keychainAccess stub:@selector(dataForKey:)
+                 andReturn:[NSKeyedArchiver archivedDataWithRootObject:testObject]
+             withArguments:key];
 
       [[[keychainAccess objectForKey:key] should] equal:testObject];
     });
@@ -160,7 +164,9 @@ describe(@"LUKeychainAccess", ^{
     context(@"if the unarchive fails", ^{
       beforeEach(^{
         int zero = 0;
-        [[keychainAccess stubAndReturn:[NSData dataWithBytes:&zero length:sizeof(zero)]] dataForKey:key];
+        [keychainAccess stub:@selector(dataForKey:)
+                   andReturn:[NSData dataWithBytes:&zero length:sizeof(zero)]
+               withArguments:key];
       });
 
       it(@"should not raise", ^{
@@ -201,7 +207,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"doesn't overwrite existing values", ^{
       [keychainAccess clearStubs];
-      [[keychainAccess stubAndReturn:@"existingValue"] objectForKey:@"existingKey"];
+      [keychainAccess stub:@selector(objectForKey:) andReturn:@"existingValue" withArguments:@"existingKey"];
 
       [[[keychainAccess shouldNot] receive] setObject:@YES forKey:@"existingKey"];
       [keychainAccess registerDefaults:@{@"existingKey" : @YES}];
