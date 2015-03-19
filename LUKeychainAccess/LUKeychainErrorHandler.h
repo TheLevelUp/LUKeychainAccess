@@ -1,3 +1,5 @@
+#import <Foundation/Foundation.h>
+
 @class LUKeychainAccess;
 
 @protocol LUKeychainErrorHandler <NSObject>

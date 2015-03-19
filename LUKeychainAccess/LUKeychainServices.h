@@ -1,4 +1,6 @@
 // A wrapper for Keychain Services using the Facade pattern: http://en.wikipedia.org/wiki/Facade_pattern
+
+#import <Foundation/Foundation.h>
 #import "LUKeychainAccess.h"
 
 @interface LUKeychainServices : NSObject
