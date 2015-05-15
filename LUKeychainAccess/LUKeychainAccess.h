@@ -1,19 +1,18 @@
 #import <Foundation/Foundation.h>
 #import "LUKeychainErrorHandler.h"
+#import "LUKeychainServices.h"
+#import "LUKeychainAccessAccessibility.h"
+
+//! Project version number for LUKeychainAccess.
+FOUNDATION_EXPORT double LUKeychainAccessVersionNumber;
+
+//! Project version string for LUKeychainAccess.
+FOUNDATION_EXPORT const unsigned char LUKeychainAccessVersionString[];
 
 extern NSString *LUKeychainAccessErrorDomain;
 
 typedef NS_ENUM(NSInteger, LUKeychainAccessError) {
   LUKeychainAccessInvalidArchiveError
-};
-
-typedef NS_ENUM(NSInteger, LUKeychainAccessAccessibility) {
-  LUKeychainAccessAttrAccessibleAfterFirstUnlock,
-  LUKeychainAccessAttrAccessibleAfterFirstUnlockThisDeviceOnly,
-  LUKeychainAccessAttrAccessibleAlways,
-  LUKeychainAccessAttrAccessibleAlwaysThisDeviceOnly,
-  LUKeychainAccessAttrAccessibleWhenUnlocked,
-  LUKeychainAccessAttrAccessibleWhenUnlockedThisDeviceOnly
 };
 
 @interface LUKeychainAccess : NSObject
