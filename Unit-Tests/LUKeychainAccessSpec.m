@@ -195,12 +195,12 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"sets strings using setString: instead of setObject:", ^{
       NSString *newValue = @"newValue";
-      [[[keychainAccess should] receive] setString:newValue forKey:@"newKey"];
+      [[keychainAccess should] receive:@selector(setString:forKey:) withArguments:newValue, @"newKey"];
       [keychainAccess registerDefaults:@{@"newKey": newValue}];
     });
 
     it(@"sets other data types via setObject:", ^{
-      [[[keychainAccess should] receive] setObject:@1 forKey:@"newKey"];
+      [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@1, @"newKey"];
       [keychainAccess registerDefaults:@{@"newKey" : @1}];
     });
 
@@ -208,18 +208,18 @@ describe(@"LUKeychainAccess", ^{
       [keychainAccess clearStubs];
       [keychainAccess stub:@selector(objectForKey:) andReturn:@"existingValue" withArguments:@"existingKey"];
 
-      [[[keychainAccess shouldNot] receive] setObject:@YES forKey:@"existingKey"];
+      [[keychainAccess shouldNot] receive:@selector(setObject:forKey:) withArguments:@YES, @"existingKey"];
       [keychainAccess registerDefaults:@{@"existingKey" : @YES}];
     });
 
     it(@"sets the value for new keys", ^{
-      [[[keychainAccess should] receive] setObject:@YES forKey:@"newKey"];
+      [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@YES, @"newKey"];
       [keychainAccess registerDefaults:@{@"newKey" : @YES}];
     });
 
     it(@"can set multiple keys", ^{
-      [[[keychainAccess should] receive] setObject:@YES forKey:@"foo"];
-      [[[keychainAccess should] receive] setObject:@100 forKey:@"bar"];
+      [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@YES, @"foo"];
+      [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@100, @"bar"];
       [keychainAccess registerDefaults:@{@"foo" : @YES, @"bar" : @100}];
     });
   });
@@ -229,7 +229,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"stores the object version of the value with the key", ^{
       BOOL testBool = NO;
-      [[[keychainAccess should] receive] setObject:@(testBool) forKey:key];
+      [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@(testBool), key];
 
       [keychainAccess setBool:testBool forKey:key];
     });
@@ -286,7 +286,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"stores the object version of the value with the key", ^{
       double testDouble = 123.0f;
-      [[[keychainAccess should] receive] setObject:@(testDouble) forKey:key];
+      [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@(testDouble), key];
 
       [keychainAccess setDouble:testDouble forKey:key];
     });
@@ -297,7 +297,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"stores the object version of the value with the key", ^{
       float testFloat = 123.0;
-      [[[keychainAccess should] receive] setObject:@(testFloat) forKey:key];
+      [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@(testFloat), key];
 
       [keychainAccess setFloat:testFloat forKey:key];
     });
@@ -308,7 +308,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"stores the object version of the value with the key", ^{
       NSInteger testInteger = 123;
-      [[[keychainAccess should] receive] setObject:@(testInteger) forKey:key];
+      [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@(testInteger), key];
 
       [keychainAccess setInteger:testInteger forKey:key];
     });
@@ -319,7 +319,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"stores the string encoded as UTF-8 with the key", ^{
       NSString *testString = @"testString";
-      [[[keychainAccess should] receive] setData:[testString dataUsingEncoding:NSUTF8StringEncoding] forKey:key];
+      [[keychainAccess should] receive:@selector(setData:forKey:) withArguments:[testString dataUsingEncoding:NSUTF8StringEncoding], key];
 
       [keychainAccess setString:testString forKey:key];
     });
@@ -330,7 +330,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"stores the archived data of the object with the key", ^{
       NSArray *testObject = @[@1, @2];
-      [[[keychainAccess should] receive] setData:[NSKeyedArchiver archivedDataWithRootObject:testObject] forKey:key];
+      [[keychainAccess should] receive:@selector(setData:forKey:) withArguments:[NSKeyedArchiver archivedDataWithRootObject:testObject], key];
 
       [keychainAccess setObject:testObject forKey:key];
     });
