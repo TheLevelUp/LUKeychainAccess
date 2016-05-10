@@ -56,6 +56,14 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   self.keychainServices.service = service;
 }
 
+- (NSString *)accessGroup {
+  return self.keychainServices.accessGroup;
+}
+
+- (void)setAccessGroup:(NSString *)accessGroup {
+  self.keychainServices.accessGroup = accessGroup;
+}
+
 #pragma mark - Getters
 
 - (BOOL)boolForKey:(NSString *)key {
