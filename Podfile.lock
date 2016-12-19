@@ -1,10 +1,12 @@
 PODS:
-  - Kiwi (2.3.0)
+  - Kiwi (2.4.0)
 
 DEPENDENCIES:
-  - Kiwi (= 2.3.0)
+  - Kiwi (= 2.4.0)
 
 SPEC CHECKSUMS:
-  Kiwi: 54bece5b35564d9b8e03c608d926f1a22fcfc589
+  Kiwi: f49c9d54b28917df5928fe44968a39ed198cb8a8
 
-COCOAPODS: 0.35.0
+PODFILE CHECKSUM: cfa460454bc69aa5ebb5b1d670c8680b6416b8d5
+
+COCOAPODS: 1.1.1

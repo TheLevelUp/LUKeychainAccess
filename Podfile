@@ -1,6 +1,5 @@
-platform :ios, '5.0'
+platform :ios, '8.0'
 
-target :test, exclusive: true do
-  link_with 'UnitTests'
-  pod 'Kiwi', '2.3.0'
+target 'UnitTests' do
+  pod 'Kiwi', '2.4.0'
 end
