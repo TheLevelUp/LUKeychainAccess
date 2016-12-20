@@ -22,6 +22,7 @@ typedef NS_ENUM(NSInteger, LUKeychainAccessError) {
 @property (nonatomic, assign) LUKeychainAccessAccessibility accessibilityState;
 @property (nonatomic, strong, nullable) id<LUKeychainErrorHandler> errorHandler;
 @property (nonatomic, assign) NSString *service;
+@property (nonatomic, assign) NSString *accessGroup;
 
 // Public Methods
 + (LUKeychainAccess *)standardKeychainAccess;

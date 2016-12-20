@@ -7,6 +7,7 @@
 
 @property (nonatomic, assign) LUKeychainAccessAccessibility accessibilityState;
 @property (nonatomic, copy) NSString *service;
+@property (nonatomic, copy) NSString *accessGroup;
 
 + (instancetype)keychainServices;
 - (BOOL)addData:(NSData *)data forKey:(NSString *)key error:(NSError **)error;
