@@ -64,6 +64,27 @@ describe(@"LUKeychainAccess", ^{
     });
   });
 
+  describe(@"deleteObjectForKey:", ^{
+    NSString *testKeyToDelete = @"test_key_to_delete";
+
+    it(@"deletes the item with the given key from the keychain", ^{
+      [[keychainServices should] receive:@selector(deleteItemWithKey:error:)
+                           withArguments:testKeyToDelete, any()];
+
+      [keychainAccess deleteObjectForKey:testKeyToDelete];
+    });
+
+    context(@"if the delete fails", ^{
+      beforeEach(^{
+        [keychainServices stub:@selector(deleteItemWithKey:error:) withBlock:errorReturningBlock];
+      });
+
+      it(@"notifies the error handler", ^{
+        [keychainAccess deleteObjectForKey:testKeyToDelete];
+      });
+    });
+  });
+
   // Getters
 
   describe(@"accessGroup", ^{

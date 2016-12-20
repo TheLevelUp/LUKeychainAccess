@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, LUKeychainAccessError) {
 // Public Methods
 + (LUKeychainAccess *)standardKeychainAccess;
 - (BOOL)deleteAll;
+- (void)deleteObjectForKey:(NSString *)key;
 
 // Getters
 - (BOOL)boolForKey:(NSString *)key;

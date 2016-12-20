@@ -38,6 +38,13 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   return YES;
 }
 
+- (void)deleteObjectForKey:(NSString *)key {
+  NSError *error;
+  if (![self.keychainServices deleteItemWithKey:key error:&error]) {
+    [self handleError:error];
+  }
+}
+
 #pragma mark - Properties
 
 - (NSString *)accessGroup {
@@ -181,13 +188,6 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 }
 
 #pragma mark - Private Methods
-
-- (void)deleteObjectForKey:(NSString *)key {
-  NSError *error;
-  if (![self.keychainServices deleteItemWithKey:key error:&error]) {
-    [self handleError:error];
-  }
-}
 
 - (void)handleError:(NSError *)error {
   if (self.errorHandler) {
