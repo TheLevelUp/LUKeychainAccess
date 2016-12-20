@@ -8,6 +8,7 @@ describe(@"LUKeychainAccess", ^{
   __block LUKeychainAccess *keychainAccess;
   __block LUKeychainServices *keychainServices;
   __block LUTestErrorHandler *errorHandler;
+  NSString *testGroup = @"test_group";
 
   // Helpers
   id (^errorReturningBlock)(NSArray *) = ^id(NSArray *params) {
@@ -64,6 +65,16 @@ describe(@"LUKeychainAccess", ^{
   });
 
   // Getters
+
+  describe(@"accessGroup", ^{
+    beforeEach(^{
+      [keychainServices stub:@selector(accessGroup) andReturn:testGroup];
+    });
+
+    it(@"returns the accessGroup of keychain services", ^{
+      [[keychainAccess.accessGroup should] equal:testGroup];
+    });
+  });
 
   describe(@"boolForKey:", ^{
     NSString *key = @"boolTest";
@@ -214,6 +225,13 @@ describe(@"LUKeychainAccess", ^{
       [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@YES, @"foo"];
       [[keychainAccess should] receive:@selector(setObject:forKey:) withArguments:@100, @"bar"];
       [keychainAccess registerDefaults:@{@"foo" : @YES, @"bar" : @100}];
+    });
+  });
+
+  describe(@"setAccessGroup:", ^{
+    it(@"sets the access group on the keychain services", ^{
+      [[keychainServices should] receive:@selector(setAccessGroup:) withArguments:testGroup];
+      keychainAccess.accessGroup = testGroup;
     });
   });
 

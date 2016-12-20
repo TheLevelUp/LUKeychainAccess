@@ -40,8 +40,16 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 
 #pragma mark - Properties
 
+- (NSString *)accessGroup {
+  return self.keychainServices.accessGroup;
+}
+
 - (LUKeychainAccessAccessibility)accessibilityState {
   return self.keychainServices.accessibilityState;
+}
+
+- (void)setAccessGroup:(NSString *)accessGroup {
+  self.keychainServices.accessGroup = accessGroup;
 }
 
 - (void)setAccessibilityState:(LUKeychainAccessAccessibility)accessibilityState {
@@ -55,6 +63,8 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 - (void)setService:(NSString *)service {
   self.keychainServices.service = service;
 }
+
+
 
 #pragma mark - Getters
 

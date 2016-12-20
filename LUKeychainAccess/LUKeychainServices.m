@@ -177,6 +177,21 @@
     query[(__bridge id)kSecAttrService] = self.service;
   }
 
+  if (self.accessGroup) {
+#if TARGET_IPHONE_SIMULATOR
+    // Ignore the access group if running on the iPhone simulator.
+    //
+    // Apps that are built for the simulator aren't signed, so there's no keychain access group
+    // for the simulator to check. This means that all apps can see all keychain items when run
+    // on the simulator.
+    //
+    // If a SecItem contains an access group attribute, SecItemAdd and SecItemUpdate on the
+    // simulator will return -25243 (errSecNoAccessForItem).
+#else
+    query[(__bridge id)kSecAttrAccessGroup] = self.accessGroup;
+#endif
+  }
+
   return query;
 }
 
