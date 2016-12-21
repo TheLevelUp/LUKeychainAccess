@@ -1,4 +1,4 @@
-LUKeychainAccess
+LUKeychainAccess [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=5859fe45ae397d010088cad4&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/5859fe45ae397d010088cad4/build/latest?branch=master)
 ================
 
 A wrapper for iOS Keychain Services that behaves just like `NSUserDefaults`.
