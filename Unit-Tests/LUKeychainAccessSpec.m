@@ -191,22 +191,6 @@ describe(@"LUKeychainAccess", ^{
 
       [[[keychainAccess objectForKey:key] should] equal:testObject];
     });
-
-    context(@"if the unarchive fails", ^{
-      beforeEach(^{
-        [keychainAccess stub:@selector(dataForKey:)
-                   andReturn:nil
-               withArguments:key];
-      });
-
-      it(@"doesn't raise an exception & notifies the error handler", ^{
-        [keychainAccess objectForKey:key];
-
-        NSError *error = [errorHandler lastError];
-        [[error shouldNot] beNil];
-        [[theValue(error.code) should] equal:theValue(LUKeychainAccessInvalidArchiveError)];
-      });
-    });
   });
 
   // Setters

@@ -114,21 +114,19 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 - (id)objectForKey:(NSString *)key {
   NSData *data = [self dataForKey:key];
 
+  id object;
   @try {
-    if (!data) {
-      [NSException raise:@"Key data is invalid" format:@"Data: %@ for key: %@ is invalid", data, key];
-    }
-
-    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    object = [NSKeyedUnarchiver unarchiveObjectWithData:data];
   } @catch (NSException *e) {
-    NSString *errorMessage = [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];
+    NSString *errorMessage =
+      [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];
     NSError *error = [NSError errorWithDomain:LUKeychainAccessErrorDomain
                                          code:LUKeychainAccessInvalidArchiveError
                                      userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
     [self handleError:error];
   }
 
-  return nil;
+  return object;
 }
 
 #pragma mark - Setters
