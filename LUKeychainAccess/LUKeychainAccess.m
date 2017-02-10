@@ -114,6 +114,8 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 - (id)objectForKey:(NSString *)key {
   NSData *data = [self dataForKey:key];
 
+  if (!data) return nil;
+
   id object;
   @try {
     object = [NSKeyedUnarchiver unarchiveObjectWithData:data];
