@@ -1,5 +1,5 @@
-@import LUKeychainAccess;
-#import "Kiwi.h"
+#import <LUKeychainAccess/LUKeychainAccess.h>
+#import <Kiwi/Kiwi.h>
 
 SPEC_BEGIN(LUKeychainServicesSpec)
 
