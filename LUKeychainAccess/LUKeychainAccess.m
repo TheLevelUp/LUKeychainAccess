@@ -143,7 +143,7 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 
 - (void)registerDefaults:(NSDictionary *)dictionary {
   for (NSString *key in [dictionary allKeys]) {
-    if (![self objectForKey:key]) {
+    if (![self objectForKey:key] && ![self stringForKey:key]) {
       if ([dictionary[key] isKindOfClass:[NSString class]]) {
         [self setString:dictionary[key] forKey:key];
       } else {

@@ -22,7 +22,7 @@ describe(@"LUKeychainAccess", ^{
   beforeEach(^{
     errorHandler = [[LUTestErrorHandler alloc] init];
 
-    keychainServices = [LUKeychainServices mock];
+    keychainServices = [LUKeychainServices nullMock];
     [LUKeychainServices stub:@selector(keychainServices) andReturn:keychainServices];
 
     keychainAccess = [LUKeychainAccess standardKeychainAccess];
@@ -219,6 +219,12 @@ describe(@"LUKeychainAccess", ^{
 
       [[keychainAccess shouldNot] receive:@selector(setObject:forKey:) withArguments:@YES, @"existingKey"];
       [keychainAccess registerDefaults:@{@"existingKey" : @YES}];
+
+      [keychainAccess clearStubs];
+      [keychainAccess stub:@selector(stringForKey:) andReturn:@"existingValue" withArguments:@"existingKey"];
+      [[keychainAccess shouldNot] receive:@selector(setString:forKey:) withArguments:@"newValue", @"existingKey"];
+
+      [keychainAccess registerDefaults:@{@"existingKey" : @"newValue"}];
     });
 
     it(@"sets the value for new keys", ^{
