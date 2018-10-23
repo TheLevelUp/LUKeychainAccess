@@ -69,7 +69,7 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"deletes the item with the given key from the keychain", ^{
       [[keychainServices should] receive:@selector(deleteItemWithKey:error:)
-                           withArguments:testKeyToDelete, any()];
+                           withArguments:testKeyToDelete, KWAny.any];
 
       [keychainAccess deleteObjectForKey:testKeyToDelete];
     });
@@ -113,7 +113,7 @@ describe(@"LUKeychainAccess", ^{
     NSString *key = @"dataTest";
 
     it(@"returns the data stored in keychain at the key", ^{
-      [[keychainServices should] receive:@selector(dataForKey:error:) andReturn:expectedResult withArguments:key, any()];
+      [[keychainServices should] receive:@selector(dataForKey:error:) andReturn:expectedResult withArguments:key, KWAny.any];
 
       [[[keychainAccess dataForKey:key] should] equal:expectedResult];
     });
@@ -262,7 +262,7 @@ describe(@"LUKeychainAccess", ^{
 
     context(@"when the data is nil", ^{
       it(@"deletes the data at the key", ^{
-        [[keychainServices should] receive:@selector(deleteItemWithKey:error:) withArguments:key, any()];
+        [[keychainServices should] receive:@selector(deleteItemWithKey:error:) withArguments:key, KWAny.any];
 
         [keychainAccess setData:nil forKey:key];
       });
@@ -272,7 +272,7 @@ describe(@"LUKeychainAccess", ^{
       NSData *testData = [@"testData" dataUsingEncoding:NSUTF8StringEncoding];
 
       it(@"attempts to add the data to the Keychain", ^{
-        [[keychainServices should] receive:@selector(addData:forKey:error:) withArguments:testData, key, any()];
+        [[keychainServices should] receive:@selector(addData:forKey:error:) withArguments:testData, key, KWAny.any];
 
         [keychainAccess setData:testData forKey:key];
       });
@@ -283,7 +283,7 @@ describe(@"LUKeychainAccess", ^{
         });
 
         it(@"updates the item with the new value", ^{
-          [[keychainServices should] receive:@selector(updateData:forKey:error:) withArguments:testData, key, any()];
+          [[keychainServices should] receive:@selector(updateData:forKey:error:) withArguments:testData, key, KWAny.any];
 
           [keychainAccess setData:testData forKey:key];
         });
