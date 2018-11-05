@@ -40,8 +40,8 @@ An instance of `LUKeychainAccess` may be optionally given a error handler, which
 
 ## Requirements
 
-`LUKeychainAccess` requires iOS 5.0+. The tests are written using [Kiwi](https://github.com/allending/Kiwi).
+`LUKeychainAccess` requires iOS 9.0+. The tests are written using [Kiwi](https://github.com/allending/Kiwi).
 
 ## License
 
-`LUKeychainAccess` is written by Costa Walcott, and is Copyright 2012-2013 SCVNGR, Inc D.B.A. LevelUp. It is free software, and may be redistributed under the terms specified in the MIT-LICENSE file.
+`LUKeychainAccess` is written by Costa Walcott, and is Copyright 2012-2018 SCVNGR, Inc D.B.A. LevelUp. It is free software, and may be redistributed under the terms specified in the MIT-LICENSE file.
