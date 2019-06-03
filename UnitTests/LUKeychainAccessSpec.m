@@ -1,6 +1,9 @@
 #import <LUKeychainAccess/LUKeychainAccess.h>
 #import <Kiwi/Kiwi.h>
 #import "LUTestErrorHandler.h"
+#import "LUTestNonNSCodingCompliantObject.h"
+#import "LUTestNSCodingCompliantObject.h"
+#import "NSKeyedArchiver+Additions.h"
 
 SPEC_BEGIN(LUKeychainAccessSpec)
 
@@ -113,7 +116,9 @@ describe(@"LUKeychainAccess", ^{
     NSString *key = @"dataTest";
 
     it(@"returns the data stored in keychain at the key", ^{
-      [[keychainServices should] receive:@selector(dataForKey:error:) andReturn:expectedResult withArguments:key, KWAny.any];
+      [[keychainServices should] receive:@selector(dataForKey:error:)
+                               andReturn:expectedResult
+                           withArguments:key, KWAny.any];
 
       [[[keychainAccess dataForKey:key] should] equal:expectedResult];
     });
@@ -186,10 +191,35 @@ describe(@"LUKeychainAccess", ^{
     it(@"returns the unarchived object from the data stored at the key", ^{
       NSArray *testObject = @[@1, @2];
       [keychainAccess stub:@selector(dataForKey:)
-                 andReturn:[NSKeyedArchiver archivedDataWithRootObject:testObject]
+                 andReturn:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject]
              withArguments:key];
 
       [[[keychainAccess objectForKey:key] should] equal:testObject];
+    });
+
+    context(@"when the object is not NSCoding compliant", ^{
+      it(@"throws an exception", ^{
+        LUTestNonNSCodingCompliantObject *testObject = [[LUTestNonNSCodingCompliantObject alloc] init];
+        testObject.testProperty1 = 2;
+        testObject.testProperty2 = @"Test";
+
+        [[theBlock(^{
+          [keychainAccess setObject:testObject forKey:key];
+        }) should] raiseWithName:@"Archiver Error"];
+      });
+    });
+
+    context(@"when the object is not NSSecureCoding compliant", ^{
+      it(@"continues to store the archived data of the object with the key", ^{
+        LUTestNSCodingCompliantObject *testObject = [[LUTestNSCodingCompliantObject alloc] init];
+        testObject.testProperty1 = 2;
+        testObject.testProperty2 = @"Test";
+
+        [[keychainAccess should] receive:@selector(setData:forKey:)
+                           withArguments:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject], key];
+
+        [keychainAccess setObject:testObject forKey:key];
+      });
     });
   });
 
@@ -283,7 +313,8 @@ describe(@"LUKeychainAccess", ^{
         });
 
         it(@"updates the item with the new value", ^{
-          [[keychainServices should] receive:@selector(updateData:forKey:error:) withArguments:testData, key, KWAny.any];
+          [[keychainServices should] receive:@selector(updateData:forKey:error:)
+                               withArguments:testData, key, KWAny.any];
 
           [keychainAccess setData:testData forKey:key];
         });
@@ -354,9 +385,34 @@ describe(@"LUKeychainAccess", ^{
     it(@"stores the archived data of the object with the key", ^{
       NSArray *testObject = @[@1, @2];
       [[keychainAccess should] receive:@selector(setData:forKey:)
-                         withArguments:[NSKeyedArchiver archivedDataWithRootObject:testObject], key];
+                         withArguments:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject], key];
 
       [keychainAccess setObject:testObject forKey:key];
+    });
+
+    context(@"when the object is not NSCoding compliant", ^{
+      it(@"throws an exception", ^{
+        LUTestNonNSCodingCompliantObject *testObject = [[LUTestNonNSCodingCompliantObject alloc] init];
+        testObject.testProperty1 = 2;
+        testObject.testProperty2 = @"Test";
+
+        [[theBlock(^{
+          [keychainAccess setObject:testObject forKey:key];
+        }) should] raiseWithName:@"Archiver Error"];
+      });
+    });
+
+    context(@"when the object is not NSSecureCoding compliant", ^{
+      it(@"continues to store the archived data of the object with the key", ^{
+        LUTestNSCodingCompliantObject *testObject = [[LUTestNSCodingCompliantObject alloc] init];
+        testObject.testProperty1 = 2;
+        testObject.testProperty2 = @"Test";
+
+        [[keychainAccess should] receive:@selector(setData:forKey:)
+                           withArguments:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject], key];
+
+        [keychainAccess setObject:testObject forKey:key];
+      });
     });
   });
 });

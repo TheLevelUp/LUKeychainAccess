@@ -8,6 +8,8 @@
 
 #import "LUKeychainAccess.h"
 #import "LUKeychainServices.h"
+#import "NSKeyedArchiver+Additions.h"
+#import "NSKeyedUnarchiver+Additions.h"
 
 NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 
@@ -126,7 +128,7 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 
   id object;
   @try {
-    object = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    object = [NSKeyedUnarchiver lu_unarchiveObjectWithData:data];
   } @catch (NSException *e) {
     NSString *errorMessage =
       [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];
@@ -192,7 +194,8 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 }
 
 - (void)setObject:(id)value forKey:(NSString *)key {
-  [self setData:[NSKeyedArchiver archivedDataWithRootObject:value] forKey:key];
+  NSData *data = [NSKeyedArchiver lu_archivedDataWithRootObject:value];
+  [self setData:data forKey:key];
 }
 
 #pragma mark - Private Methods
