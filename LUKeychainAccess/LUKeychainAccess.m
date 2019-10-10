@@ -81,6 +81,14 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   self.keychainServices.service = service;
 }
 
+- (BOOL)synchronizable {
+  return self.keychainServices.synchronizable;
+}
+
+- (void)setSynchronizable:(BOOL)synchronizable {
+  self.keychainServices.synchronizable = synchronizable;
+}
+
 
 
 #pragma mark - Getters
