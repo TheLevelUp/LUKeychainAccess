@@ -34,6 +34,13 @@ This option can be set in `LUKeychainAccess` through the `accessibilityState` pa
 
 The default value is `LUKeychainAccessAttrAccessibleWhenUnlocked`.
 
+### Synchronizing Keychain items with iCloud
+
+```objectivec
+LUKeychainAccess *access = [LUKeychainAccess standardKeychainAccess];
+[access setSynchronizable:YES];
+```
+
 ## Error Handling
 
 An instance of `LUKeychainAccess` may be optionally given a error handler, which can be any object that implements the `LUKeychainErrorHandler` protocol. This error handler will be notified if an error occurs.
