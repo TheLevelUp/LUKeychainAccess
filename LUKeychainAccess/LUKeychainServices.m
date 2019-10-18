@@ -84,6 +84,9 @@
 - (BOOL)updateData:(NSData *)data forKey:(NSString *)key error:(NSError **)error {
   NSMutableDictionary *query = [self queryDictionaryForKey:key];
   query[(__bridge id)kSecValueData] = data;
+  if (self.synchronizable) {
+    query[(__bridge id)kSecAttrSynchronizable] = (__bridge id)kCFBooleanTrue;
+  }
 
   NSMutableDictionary *updateQuery = [NSMutableDictionary dictionary];
   updateQuery[(__bridge id)kSecValueData] = data;
@@ -180,10 +183,6 @@
 
   NSData *encodedIdentifier = [key dataUsingEncoding:NSUTF8StringEncoding];
   query[(__bridge id)kSecAttrAccount] = encodedIdentifier;
-
-  if (self.synchronizable) {
-    query[(__bridge id)kSecAttrSynchronizable] = (__bridge id)kCFBooleanTrue;
-  }
 
   if (self.service) {
     query[(__bridge id)kSecAttrService] = self.service;
