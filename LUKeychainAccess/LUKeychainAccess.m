@@ -122,23 +122,11 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 }
 
 - (id)objectForKey:(NSString *)key {
-  NSData *data = [self dataForKey:key];
+  return [self internalObjectForKey:key withClass:Nil];
+}
 
-  if (!data) return nil;
-
-  id object;
-  @try {
-    object = [NSKeyedUnarchiver lu_unarchiveObjectWithData:data];
-  } @catch (NSException *e) {
-    NSString *errorMessage =
-      [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];
-    NSError *error = [NSError errorWithDomain:LUKeychainAccessErrorDomain
-                                         code:LUKeychainAccessInvalidArchiveError
-                                     userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
-    [self handleError:error];
-  }
-
-  return object;
+- (id)objectForKey:(NSString *)key withClass:(Class)objectClass {
+  return [self internalObjectForKey:key withClass:objectClass];
 }
 
 #pragma mark - Setters
@@ -204,6 +192,30 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   if (self.errorHandler) {
     [self.errorHandler keychainAccess:self receivedError:error];
   }
+}
+
+- (id)internalObjectForKey:(NSString *)key withClass:(nullable Class)objectClass {
+  NSData *data = [self dataForKey:key];
+
+  if (!data) return nil;
+
+  id object;
+  @try {
+    if (@available(iOS 11, watchOS 4, *) && objectClass) {
+      object = [NSKeyedUnarchiver lu_unarchiveObjectOfClass:objectClass withData:data];
+    } else {
+      object = [NSKeyedUnarchiver lu_unarchiveObjectWithData:data];
+    }
+  } @catch (NSException *e) {
+    NSString *errorMessage =
+      [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];
+    NSError *error = [NSError errorWithDomain:LUKeychainAccessErrorDomain
+                                         code:LUKeychainAccessInvalidArchiveError
+                                     userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+    [self handleError:error];
+  }
+
+  return object;
 }
 
 @end

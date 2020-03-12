@@ -44,6 +44,7 @@ typedef NS_ENUM(NSInteger, LUKeychainAccessError) {
 - (float)floatForKey:(NSString *)key;
 - (NSInteger)integerForKey:(NSString *)key;
 - (nullable id)objectForKey:(NSString *)key;
+- (nullable id)objectForKey:(NSString *)key withClass:(Class)objectClass API_AVAILABLE(ios(11), watchos(4));
 - (nullable NSString *)stringForKey:(NSString *)key;
 
 // Setters

@@ -1,4 +1,5 @@
 #import "NSKeyedUnarchiver+Additions.h"
+#import "LUKeychainAccess.h"
 
 @implementation NSKeyedUnarchiver (Additions)
 
@@ -9,7 +10,7 @@
   if (@available(iOS 11, watchOS 4, *)) {
     result = [self unarchivedObjectOfClass:objectClass fromData:data error:&error];
   } else {
-    error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:nil];
+    error = [NSError errorWithDomain:LUKeychainAccessErrorDomain code:LUKeychainAccessInvalidArchiveError userInfo:nil];
   }
 
   if(error) {
