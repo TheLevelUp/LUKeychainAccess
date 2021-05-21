@@ -10,6 +10,7 @@ typedef NS_ENUM(NSInteger, LUKeychainAccessAccessibility) {
   LUKeychainAccessAttrAccessibleAfterFirstUnlock,
   LUKeychainAccessAttrAccessibleAfterFirstUnlockThisDeviceOnly,
   LUKeychainAccessAttrAccessibleAlways,
+  LUKeychainAccessAttrAccessibleNil,
   LUKeychainAccessAttrAccessibleAlwaysThisDeviceOnly,
   LUKeychainAccessAttrAccessibleWhenUnlocked,
   LUKeychainAccessAttrAccessibleWhenUnlockedThisDeviceOnly
