@@ -20,6 +20,7 @@
   if (!self) return nil;
 
   _accessibilityState = LUKeychainAccessAttrAccessibleWhenUnlocked;
+  _additionalQueryParams = nil;
 
   return self;
 }
@@ -111,6 +112,9 @@
     case LUKeychainAccessAttrAccessibleAlways:
       return kSecAttrAccessibleAlways;
 
+    case LUKeychainAccessAttrAccessibleNil:
+      return nil;
+
     case LUKeychainAccessAttrAccessibleAlwaysThisDeviceOnly:
       return kSecAttrAccessibleAlwaysThisDeviceOnly;
 
@@ -183,6 +187,10 @@
 
   if (self.service) {
     query[(__bridge id)kSecAttrService] = self.service;
+  }
+
+  if (self.additionalQueryParams) {
+    [query addEntriesFromDictionary:self.additionalQueryParams];
   }
 
   if (self.accessGroup) {
