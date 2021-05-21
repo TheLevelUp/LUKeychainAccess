@@ -65,12 +65,20 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   return self.keychainServices.accessibilityState;
 }
 
+- (NSDictionary *)additionalQueryParams {
+  return self.keychainServices.additionalQueryParams;
+}
+
 - (void)setAccessGroup:(NSString *)accessGroup {
   self.keychainServices.accessGroup = accessGroup;
 }
 
 - (void)setAccessibilityState:(LUKeychainAccessAccessibility)accessibilityState {
   self.keychainServices.accessibilityState = accessibilityState;
+}
+
+- (void)setAdditionalQueryParams:(NSDictionary *)additionalQueryParams {
+  self.keychainServices.additionalQueryParams = additionalQueryParams;
 }
 
 - (NSString *)service {

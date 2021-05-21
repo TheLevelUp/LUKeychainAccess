@@ -20,6 +20,7 @@
   if (!self) return nil;
 
   _accessibilityState = LUKeychainAccessAttrAccessibleWhenUnlocked;
+  _additionalQueryParams = nil;
 
   return self;
 }
@@ -111,6 +112,9 @@
     case LUKeychainAccessAttrAccessibleAlways:
       return kSecAttrAccessibleAlways;
 
+    case LUKeychainAccessAttrAccessibleNil:
+      return nil;
+
     case LUKeychainAccessAttrAccessibleAlwaysThisDeviceOnly:
       return kSecAttrAccessibleAlwaysThisDeviceOnly;
 
@@ -185,6 +189,10 @@
     query[(__bridge id)kSecAttrService] = self.service;
   }
 
+  if (self.additionalQueryParams) {
+    [query addEntriesFromDictionary:self.additionalQueryParams];
+  }
+
   if (self.accessGroup) {
 #if TARGET_IPHONE_SIMULATOR
     // Ignore the access group if running on the iPhone simulator.
@@ -199,6 +207,8 @@
     query[(__bridge id)kSecAttrAccessGroup] = self.accessGroup;
 #endif
   }
+
+  NSLog(@"%@", query);
 
   return query;
 }
