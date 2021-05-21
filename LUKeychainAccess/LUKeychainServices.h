@@ -15,6 +15,7 @@
 
 @property (nonatomic, copy) NSString *accessGroup;
 @property (nonatomic, assign) LUKeychainAccessAccessibility accessibilityState;
+@property (nonatomic, strong) NSDictionary *additionalQueryParams;
 @property (nonatomic, copy) NSString *service;
 
 + (instancetype)keychainServices;

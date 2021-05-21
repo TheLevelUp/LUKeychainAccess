@@ -12,6 +12,7 @@ describe(@"LUKeychainAccess", ^{
   __block LUKeychainServices *keychainServices;
   __block LUTestErrorHandler *errorHandler;
   NSString *testGroup = @"test_group";
+  NSDictionary *testAdditionalParams = @{ @"test":@"test" };
 
   // Helpers
   id (^errorReturningBlock)(NSArray *) = ^id(NSArray *params) {
@@ -97,6 +98,16 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the accessGroup of keychain services", ^{
       [[keychainAccess.accessGroup should] equal:testGroup];
+    });
+  });
+
+  describe(@"additionalQueryParams", ^{
+    beforeEach(^{
+      [keychainServices stub:@selector(additionalQueryParams) andReturn:testAdditionalParams];
+    });
+
+    it(@"returns the additionalQueryParams of keychain services", ^{
+      [[keychainAccess.additionalQueryParams should] equal:testAdditionalParams];
     });
   });
 
@@ -273,6 +284,13 @@ describe(@"LUKeychainAccess", ^{
     it(@"sets the access group on the keychain services", ^{
       [[keychainServices should] receive:@selector(setAccessGroup:) withArguments:testGroup];
       keychainAccess.accessGroup = testGroup;
+    });
+  });
+
+  describe(@"setAdditionalQueryParams:", ^{
+    it(@"sets the additionalQueryParams dictionary on the keychain services", ^{
+      [[keychainServices should] receive:@selector(setAdditionalQueryParams:) withArguments:testAdditionalParams];
+      keychainAccess.additionalQueryParams = testAdditionalParams;
     });
   });
 
