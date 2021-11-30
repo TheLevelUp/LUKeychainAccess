@@ -44,7 +44,8 @@ typedef NS_ENUM(NSInteger, LUKeychainAccessError) {
 - (double)doubleForKey:(NSString *)key;
 - (float)floatForKey:(NSString *)key;
 - (NSInteger)integerForKey:(NSString *)key;
-- (nullable id)objectForKey:(NSString *)key;
+- (nullable id)objectForKey:(NSString *)key ofClass:(Class)cls;
+- (nullable id)recursivelyFindObjectForKey:(NSString *)key fromClass:(Class)cls;
 - (nullable NSString *)stringForKey:(NSString *)key;
 
 // Setters
@@ -56,6 +57,10 @@ typedef NS_ENUM(NSInteger, LUKeychainAccessError) {
 - (void)setInteger:(NSInteger)value forKey:(NSString *)key;
 - (void)setObject:(nullable id)value forKey:(NSString *)key;
 - (void)setString:(nullable NSString *)inputString forKey:(NSString *)key;
+
+//Deprecated
+- (nullable id)objectForKey:(NSString *)key
+__attribute__((deprecated("Please use objectForKey:ofClass:")));
 
 @end
 
