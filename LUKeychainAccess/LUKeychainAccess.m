@@ -94,7 +94,7 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 #pragma mark - Getters
 
 - (BOOL)boolForKey:(NSString *)key {
-  return [[self objectForKey:key] boolValue];
+  return [[self objectForKey:key ofClass:NSNumber.class] boolValue];
 }
 
 - (NSData *)dataForKey:(NSString *)key {
@@ -110,15 +110,15 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 }
 
 - (double)doubleForKey:(NSString *)key {
-  return [[self objectForKey:key] doubleValue];
+  return [[self objectForKey:key ofClass:NSNumber.class] doubleValue];
 }
 
 - (float)floatForKey:(NSString *)key {
-  return [[self objectForKey:key] floatValue];
+  return [[self objectForKey:key ofClass:NSNumber.class] floatValue];
 }
 
 - (NSInteger)integerForKey:(NSString *)key {
-  return [[self objectForKey:key] integerValue];
+  return [[self objectForKey:key ofClass:NSNumber.class] integerValue];
 }
 
 - (NSString *)stringForKey:(NSString *)key {
@@ -129,14 +129,14 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
-- (id)objectForKey:(NSString *)key {
+- (id)objectForKey:(NSString *)key ofClass:(Class)cls {
   NSData *data = [self dataForKey:key];
 
   if (!data) return nil;
 
   id object;
   @try {
-    object = [NSKeyedUnarchiver lu_unarchiveObjectWithData:data];
+    object = [NSKeyedUnarchiver lu_unarchiveObjectOfClass:cls withData:data];
   } @catch (NSException *e) {
     NSString *errorMessage =
       [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];
@@ -149,11 +149,21 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   return object;
 }
 
+- (id)recursivelyFindObjectForKey:(NSString *)key fromClass:(Class)cls {
+  id result = [self objectForKey:key ofClass:cls];
+
+  if (!result && [cls superclass] && [cls superclass] != NSObject.class) {
+    return [self recursivelyFindObjectForKey:key fromClass:[cls superclass]];
+  }
+
+  return result;
+}
+
 #pragma mark - Setters
 
 - (void)registerDefaults:(NSDictionary *)dictionary {
   for (NSString *key in [dictionary allKeys]) {
-    if (![self objectForKey:key] && ![self stringForKey:key]) {
+    if (![self recursivelyFindObjectForKey:key fromClass:[dictionary[key] class]] && ![self stringForKey:key]) {
       if ([dictionary[key] isKindOfClass:[NSString class]]) {
         [self setString:dictionary[key] forKey:key];
       } else {
@@ -212,6 +222,12 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
   if (self.errorHandler) {
     [self.errorHandler keychainAccess:self receivedError:error];
   }
+}
+
+#pragma mark - Deprecated
+
+- (id)objectForKey:(NSString *)key {
+  return [self objectForKey:key ofClass:NSObject.class];
 }
 
 @end
