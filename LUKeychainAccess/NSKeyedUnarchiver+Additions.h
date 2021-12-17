@@ -7,6 +7,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable id)lu_unarchiveObjectWithData:(NSData *)data
 __attribute__((deprecated("Please use lu_unarchiveObjectOfClass:withData")));
 
++ (nullable id)lu_unarchiveObjectOfClasses:(NSSet*)set withData:(NSData *)data;
 +(nullable id)lu_unarchiveObjectOfClass:(Class)cls withData:(NSData *)data;
 
 @end

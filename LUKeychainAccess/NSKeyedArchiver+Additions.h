@@ -4,7 +4,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSKeyedArchiver (Additions)
 
-+ (NSData *)lu_archivedDataWithRootObject:(nonnull id)object;
++ (nullable NSData *)lu_archivedDataWithRootObject:(nullable id)object;
 
 @end
 

@@ -196,6 +196,33 @@ describe(@"LUKeychainAccess", ^{
     });
   });
 
+  describe(@"objectForKey:ofClasses:", ^{
+    NSString *key = @"objectTest";
+
+    it(@"returns the unarchived object from the data stored at the key", ^{
+      NSArray *testObject = @[@1, @2];
+      [keychainAccess stub:@selector(dataForKey:)
+                 andReturn:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject]
+             withArguments:key];
+
+      [[[keychainAccess objectForKey:key ofClasses:[NSSet setWithArray:@[[NSArray class]]]] should] equal:testObject];
+    });
+
+    context(@"when the incorrect class types are passed in", ^{
+      it(@"notifies the error handler", ^{
+        NSSet *set = [NSSet setWithObjects: @"A", @"B", @"C", nil];
+        NSArray *testObject = @[set];
+
+        [keychainAccess stub:@selector(dataForKey:)
+                   andReturn:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject]
+               withArguments:key];
+        [keychainAccess objectForKey:key ofClasses:[NSSet setWithArray:@[[NSArray class]]]];
+
+        [[errorHandler.lastError shouldNot] beNil];
+      });
+    });
+  });
+
   describe(@"objectForKey:ofClass:", ^{
     NSString *key = @"objectTest";
 
@@ -244,7 +271,7 @@ describe(@"LUKeychainAccess", ^{
                    andReturn:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject]
                withArguments:key];
 
-        [[[keychainAccess objectForKey:key ofClass:[testObject class]] should] beNil];
+        [[[keychainAccess objectForKey:key ofClass:[testObject class]] should] equal:testObject];
         [[[keychainAccess recursivelyFindObjectForKey:key fromClass:[testObject class]] should] equal:testObject];
       });
     });
@@ -468,6 +495,16 @@ describe(@"LUKeychainAccess", ^{
                          withArguments:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject], key];
 
       [keychainAccess setObject:testObject forKey:key];
+    });
+
+    context(@"when the object is nil", ^{
+      it(@"calls setData:forKey: with nil data", ^{
+        id testObject = nil;
+        [[keychainAccess should] receive:@selector(setData:forKey:)
+                           withArguments:nil, key];
+
+        [keychainAccess setObject:testObject forKey:key];
+      });
     });
 
     context(@"when the object is not NSCoding compliant", ^{

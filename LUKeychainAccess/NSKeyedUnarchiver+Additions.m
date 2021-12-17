@@ -2,10 +2,12 @@
 
 @implementation NSKeyedUnarchiver (Additions)
 
-+ (nullable id)lu_unarchiveObjectOfClass:(Class)cls withData:(NSData *)data {
++ (nullable id)lu_unarchiveObjectOfClasses:(NSSet*)set withData:(NSData *)data {
   if (@available(iOS 11, *)) {
     NSError *error;
-    id result = [self unarchivedObjectOfClass:cls fromData:data error:&error];
+    NSSet *_set = [NSSet setWithArray:@[NSString.class, NSDictionary.class, NSArray.class, NSNumber.class]];
+    NSSet *combinedSet = [_set setByAddingObjectsFromSet:set];
+    id result = [self unarchivedObjectOfClasses:combinedSet fromData:data error:&error];
 
     if(error) {
       [NSException raise:@"Unarchiver Error" format:@"NSKeyedUnarchiver encountered %@", error];
@@ -19,6 +21,10 @@
       [NSException raise:@"Unarchiver Error" format:@"NSKeyedUnarchiver encountered %@", exception];
     }
   }
+}
+
++ (nullable id)lu_unarchiveObjectOfClass:(Class)cls withData:(NSData *)data {
+  return [self lu_unarchiveObjectOfClasses:[NSSet setWithObject:cls] withData:data];
 }
 
 #pragma mark - Deprecated
