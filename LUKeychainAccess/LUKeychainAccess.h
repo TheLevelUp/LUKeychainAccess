@@ -39,6 +39,21 @@ typedef NS_ENUM(NSInteger, LUKeychainAccessError) {
 - (void)deleteObjectForKey:(NSString *)key;
 
 // Getters
+
+/**
+ Returns the root object of one of the given classes from the given archive, previously encoded by one of the "set"
+ methods (setBool, setFloat etc.).
+
+ @param key The key that was previously used to archive the data.
+ @param set The set of classes needed to unarchive the root object.
+
+ @warning Classes of NSString, NSDictionary, NSArray, and NSNumber are supplied by default, all other classes
+ must be passed in.
+
+ @return The previously archived object, nil if the key or classes are not valid or the data can't be decoded.
+ Calls `handleError:` with errors from NSKeyedUnarchiver.
+ */
+- (nullable id)objectForKey:(NSString *)key ofClasses:(NSSet *)set;
 - (BOOL)boolForKey:(NSString *)key;
 - (nullable NSData *)dataForKey:(NSString *)key;
 - (double)doubleForKey:(NSString *)key;

@@ -130,13 +130,17 @@ NSString *LUKeychainAccessErrorDomain = @"LUKeychainAccessErrorDomain";
 }
 
 - (id)objectForKey:(NSString *)key ofClass:(Class)cls {
+  return [self objectForKey:key ofClasses:[NSSet setWithObject:cls]];
+}
+
+- (id)objectForKey:(NSString *)key ofClasses:(NSSet *)set {
   NSData *data = [self dataForKey:key];
 
   if (!data) return nil;
 
   id object;
   @try {
-    object = [NSKeyedUnarchiver lu_unarchiveObjectOfClass:cls withData:data];
+    object = [NSKeyedUnarchiver lu_unarchiveObjectOfClasses:set withData:data];
   } @catch (NSException *e) {
     NSString *errorMessage =
       [NSString stringWithFormat:@"Error while calling objectForKey: with key %@: %@", key, [e description]];

@@ -2,7 +2,9 @@
 
 @implementation NSKeyedArchiver (Additions)
 
-+ (NSData *)lu_archivedDataWithRootObject:(nonnull id)object {
++ (NSData *)lu_archivedDataWithRootObject:(nullable id)object {
+  if (!object) return nil;
+
   if (@available(iOS 11, *)) {
     NSError *error;
     NSData *result = [self archivedDataWithRootObject:object
