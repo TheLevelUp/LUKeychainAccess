@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'LUKeychainAccess'
-  s.version      = '3.0.3'
+  s.version      = '3.1.0'
   s.summary      = 'A wrapper for iOS Keychain Services that behaves just like NSUserDefaults.'
   s.homepage     = 'https://github.com/TheLevelUp/LUKeychainAccess'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
