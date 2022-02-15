@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "LUKeychainAccess",
     platforms: [
-      .iOS(.v13)
+        .iOS(.v13)
     ],
     products: [
         .library(
@@ -18,6 +18,8 @@ let package = Package(
     targets: [
         .target(
             name: "LUKeychainAccess",
-            dependencies: [])
+            dependencies: [],
+            exclude: ["LUKeychainAccess-Prefix.pch", "Info.plist"]
+        )
     ]
 )
