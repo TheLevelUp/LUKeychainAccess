@@ -125,8 +125,8 @@
 		0226873916BAD892008FC8FA = {
 			isa = PBXGroup;
 			children = (
+				2AFD0B4A27BB9CE2003EB0BF /* Sources */,
 				F6B0FEE222A89D8F00115793 /* UnitTests */,
-				0226874716BAD892008FC8FA /* LUKeychainAccess */,
 				6AC1AB0A1E0766DD00E699C9 /* Testing App */,
 				0226874416BAD892008FC8FA /* Frameworks */,
 				0226874316BAD892008FC8FA /* Products */,
@@ -192,6 +192,14 @@
 				842FC9C859A7E9A307878E6E /* Pods-UnitTests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		2AFD0B4A27BB9CE2003EB0BF /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				0226874716BAD892008FC8FA /* LUKeychainAccess */,
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		6AC1AB0A1E0766DD00E699C9 /* Testing App */ = {
