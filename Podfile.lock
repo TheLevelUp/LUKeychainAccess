@@ -5,12 +5,12 @@ DEPENDENCIES:
   - Kiwi (= 3.0.0)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - Kiwi
 
 SPEC CHECKSUMS:
   Kiwi: fbeafef0f00e4d8f7dcb3420a4930afe70af77f7
 
-PODFILE CHECKSUM: c005fd22ec0d82b8ddf150a3df1c953eb944280e
+PODFILE CHECKSUM: 671ab865b16f45f866977a5e5fd6a468c0c964bf
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.3

@@ -16,6 +16,13 @@
 		6AC1AB161E0766DD00E699C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AC1AB141E0766DD00E699C9 /* Main.storyboard */; };
 		6AC1AB181E0766DD00E699C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AC1AB171E0766DD00E699C9 /* Assets.xcassets */; };
 		6AC1AB1B1E0766DD00E699C9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AC1AB191E0766DD00E699C9 /* LaunchScreen.storyboard */; };
+		9F52EF1F28EC1DCA00738A74 /* LUKeychainServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F52EF1E28EC1DCA00738A74 /* LUKeychainServices.swift */; };
+		9F52EF2128EC314400738A74 /* LUKeychainAccessError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F52EF2028EC314400738A74 /* LUKeychainAccessError.swift */; };
+		F0CC695D28DADE560078DB71 /* LUKeychainAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC695C28DADE560078DB71 /* LUKeychainAccess.swift */; };
+		F0CC695F28DB1DE80078DB71 /* LUKeychainAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC695E28DB1DE80078DB71 /* LUKeychainAccessibility.swift */; };
+		F0CC696128DB1FEB0078DB71 /* LUKeychainErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC696028DB1FEB0078DB71 /* LUKeychainErrorHandler.swift */; };
+		F0CC696328DB22800078DB71 /* NSKeyedArchiverExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC696228DB22800078DB71 /* NSKeyedArchiverExtension.swift */; };
+		F0CC696528DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC696428DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift */; };
 		F69ACBEA22A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = F69ACBE822A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h */; };
 		F69ACBEB22A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F69ACBE922A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m */; };
 		F69ACBEE22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = F69ACBEC22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h */; };
@@ -75,7 +82,14 @@
 		6AC1AB1A1E0766DD00E699C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6AC1AB1C1E0766DD00E699C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		842FC9C859A7E9A307878E6E /* Pods-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnitTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-UnitTests/Pods-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
+		9F52EF1E28EC1DCA00738A74 /* LUKeychainServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainServices.swift; sourceTree = "<group>"; };
+		9F52EF2028EC314400738A74 /* LUKeychainAccessError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainAccessError.swift; sourceTree = "<group>"; };
 		D26BFC4B2590FA2455F402DB /* libPods-UnitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-UnitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0CC695C28DADE560078DB71 /* LUKeychainAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainAccess.swift; sourceTree = "<group>"; };
+		F0CC695E28DB1DE80078DB71 /* LUKeychainAccessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainAccessibility.swift; sourceTree = "<group>"; };
+		F0CC696028DB1FEB0078DB71 /* LUKeychainErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainErrorHandler.swift; sourceTree = "<group>"; };
+		F0CC696228DB22800078DB71 /* NSKeyedArchiverExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSKeyedArchiverExtension.swift; sourceTree = "<group>"; };
+		F0CC696428DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSKeyedUnarchiverExtension.swift; sourceTree = "<group>"; };
 		F69ACBE822A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSKeyedUnarchiver+Additions.h"; sourceTree = "<group>"; };
 		F69ACBE922A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSKeyedUnarchiver+Additions.m"; sourceTree = "<group>"; };
 		F69ACBEC22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSKeyedArchiver+Additions.h"; sourceTree = "<group>"; };
@@ -125,12 +139,12 @@
 		0226873916BAD892008FC8FA = {
 			isa = PBXGroup;
 			children = (
-				F6B0FEE222A89D8F00115793 /* UnitTests */,
 				0226874716BAD892008FC8FA /* LUKeychainAccess */,
 				6AC1AB0A1E0766DD00E699C9 /* Testing App */,
+				F6B0FEE222A89D8F00115793 /* UnitTests */,
 				0226874416BAD892008FC8FA /* Frameworks */,
-				0226874316BAD892008FC8FA /* Products */,
 				05D24E13073B326301AC9391 /* Pods */,
+				0226874316BAD892008FC8FA /* Products */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -161,16 +175,14 @@
 		0226874716BAD892008FC8FA /* LUKeychainAccess */ = {
 			isa = PBXGroup;
 			children = (
-				0226874A16BAD892008FC8FA /* LUKeychainAccess.h */,
-				0226874C16BAD892008FC8FA /* LUKeychainAccess.m */,
-				F8120D2B1B065C32004EBEF3 /* LUKeychainAccessAccessibility.h */,
-				02ABC53118087D0100A13931 /* LUKeychainErrorHandler.h */,
-				028CCA1F18084AAF00267911 /* LUKeychainServices.h */,
-				028CCA2018084AAF00267911 /* LUKeychainServices.m */,
-				F69ACBEC22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h */,
-				F69ACBED22A5B7CA00F48886 /* NSKeyedArchiver+Additions.m */,
-				F69ACBE822A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h */,
-				F69ACBE922A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m */,
+				9F52EF2028EC314400738A74 /* LUKeychainAccessError.swift */,
+				F0CC695C28DADE560078DB71 /* LUKeychainAccess.swift */,
+				F0CC695E28DB1DE80078DB71 /* LUKeychainAccessibility.swift */,
+				9F52EF1E28EC1DCA00738A74 /* LUKeychainServices.swift */,
+				F0CC696028DB1FEB0078DB71 /* LUKeychainErrorHandler.swift */,
+				F0CC696228DB22800078DB71 /* NSKeyedArchiverExtension.swift */,
+				F0CC696428DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift */,
+				F0CC695B28DADE380078DB71 /* Deprecated */,
 				0226874816BAD892008FC8FA /* Supporting Files */,
 			);
 			path = LUKeychainAccess;
@@ -216,6 +228,23 @@
 				6AC1AB0C1E0766DD00E699C9 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F0CC695B28DADE380078DB71 /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				0226874A16BAD892008FC8FA /* LUKeychainAccess.h */,
+				0226874C16BAD892008FC8FA /* LUKeychainAccess.m */,
+				F8120D2B1B065C32004EBEF3 /* LUKeychainAccessAccessibility.h */,
+				02ABC53118087D0100A13931 /* LUKeychainErrorHandler.h */,
+				028CCA1F18084AAF00267911 /* LUKeychainServices.h */,
+				028CCA2018084AAF00267911 /* LUKeychainServices.m */,
+				F69ACBEC22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h */,
+				F69ACBED22A5B7CA00F48886 /* NSKeyedArchiver+Additions.m */,
+				F69ACBE822A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h */,
+				F69ACBE922A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m */,
+			);
+			name = Deprecated;
 			sourceTree = "<group>";
 		};
 		F6B0FEE222A89D8F00115793 /* UnitTests */ = {
@@ -331,7 +360,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0610;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1400;
 				ORGANIZATIONNAME = SCVNGR;
 				TargetAttributes = {
 					0226875216BAD892008FC8FA = {
@@ -344,6 +373,7 @@
 					};
 					F8B3FC0B1B027CBA008AF919 = {
 						CreatedOnToolsVersion = 6.3.1;
+						LastSwiftMigration = 1400;
 					};
 				};
 			};
@@ -446,10 +476,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F52EF1F28EC1DCA00738A74 /* LUKeychainServices.swift in Sources */,
 				F8B3FC291B027D52008AF919 /* LUKeychainServices.m in Sources */,
+				F0CC696128DB1FEB0078DB71 /* LUKeychainErrorHandler.swift in Sources */,
 				F8B3FC261B027D52008AF919 /* LUKeychainAccess.m in Sources */,
+				9F52EF2128EC314400738A74 /* LUKeychainAccessError.swift in Sources */,
 				F69ACBEB22A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m in Sources */,
+				F0CC695D28DADE560078DB71 /* LUKeychainAccess.swift in Sources */,
 				F69ACBEF22A5B7CA00F48886 /* NSKeyedArchiver+Additions.m in Sources */,
+				F0CC695F28DB1DE80078DB71 /* LUKeychainAccessibility.swift in Sources */,
+				F0CC696528DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift in Sources */,
+				F0CC696328DB22800078DB71 /* NSKeyedArchiverExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,6 +545,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -532,7 +570,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
@@ -559,6 +597,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -575,8 +614,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
@@ -586,6 +626,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3E9010F1E85AC2488BD49F29 /* Pods-UnitTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -600,6 +641,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 842FC9C859A7E9A307878E6E /* Pods-UnitTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -687,11 +729,14 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = LUKeychainAccess/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SCVNGR.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -725,11 +770,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = LUKeychainAccess/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SCVNGR.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
