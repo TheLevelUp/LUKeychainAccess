@@ -40,13 +40,13 @@ class LUKeychainServices {
     return true
   }
   
-  func data(for key: String, error: inout Error) -> Data? {
+  func data(for key: String, error: inout Error?) -> Data? {
     var query = queryDictionary(for: key)
     query[kSecMatchLimit as String] = kSecMatchLimitOne
     query[kSecReturnData as String] = kCFBooleanTrue
     
     var cfResult: CFTypeRef?
-    var status = SecItemCopyMatching(query as CFDictionary, &cfResult)
+    let status = SecItemCopyMatching(query as CFDictionary, &cfResult)
     
     guard status == noErr , let data = cfResult as? Data else {
       error = self.error(from: status, description: "SecItemCopyMatching with key \(key)")
@@ -57,8 +57,8 @@ class LUKeychainServices {
   }
   
   func deleteAllItems(error: inout Error?) -> Bool {
-    var query = [kSecClass: kSecClassGenericPassword]
-    var status = SecItemDelete(query as CFDictionary)
+    let query = [kSecClass: kSecClassGenericPassword]
+    let status = SecItemDelete(query as CFDictionary)
     
     guard status == noErr else {
       error = self.error(from: status, description: "SecItemDelete with no key")
@@ -69,8 +69,8 @@ class LUKeychainServices {
   }
   
   func deleteItem(for key: String, error: inout Error?) -> Bool {
-    var query = queryDictionary(for: key)
-    var status = SecItemDelete(query as CFDictionary)
+    let query = queryDictionary(for: key)
+    let status = SecItemDelete(query as CFDictionary)
     
     guard status == noErr else {
       error = self.error(from: status, description: "SecItemDelete with key \(key)")
@@ -84,11 +84,11 @@ class LUKeychainServices {
     var query = queryDictionary(for: key)
     query[kSecValueData as String] = data
     
-    var updateQuery =
+    let updateQuery =
     [kSecValueData: data,
 kSecAttrAccessible: accessibilityState.stateCFType] as [CFString : Any?]
     
-    var status = SecItemUpdate(query as CFDictionary,
+    let status = SecItemUpdate(query as CFDictionary,
                                updateQuery as CFDictionary)
     
     guard status == noErr else {
@@ -153,7 +153,7 @@ kSecAttrAccessible: accessibilityState.stateCFType] as [CFString : Any?]
   }
   
   private func queryDictionary(for key: String) -> [String: Any] {
-    var query: NSMutableDictionary =
+    let query: NSMutableDictionary =
     [kSecClass:kSecClassGenericPassword,
 kSecAttrAccount: key.data(using: String.Encoding(rawValue: NSUTF8StringEncoding)) as Any
     ]

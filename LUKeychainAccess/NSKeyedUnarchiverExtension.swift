@@ -10,7 +10,7 @@ import Foundation
 @objc public extension NSKeyedUnarchiver {
   // Not sure the type specifier as AnyClasses does not conform to hashable
   @objc
-  class func lu_unarchiveObject(of classes: Set<AnyHashable>, with data: Data) -> Any? {
+  class func lu_unarchiveObject(ofClasses classes: Set<AnyHashable>, with data: Data) -> Any? {
       var baseClasses = NSSet(objects: NSString.self, NSDictionary.self, NSArray.self, NSNumber.self) as! Set<AnyHashable>
       baseClasses.formUnion(classes)
       
@@ -25,6 +25,6 @@ import Foundation
   @objc
   class func lu_archiveObject(of aClass: AnyHashable, with data: Data)  -> Any? {
     let set: Set = [aClass]
-      return lu_unarchiveObject(of: set, with: data)
+      return lu_unarchiveObject(ofClasses: set, with: data)
   }
 }

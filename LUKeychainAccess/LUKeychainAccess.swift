@@ -81,7 +81,12 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
   @objc
   public func register(defaults: [String: Any]) {
     for (key, value) in defaults {
-      if recursivelyFindObject(for: key, from: type(of: value)) == nil && string(for: key) == nil {
+      guard let hashableType = type(of: value) as? AnyHashable else {
+        assertionFailure("Type \(type(of: value)) does not conform to AnyHashable")
+        return
+      }
+      
+      if recursivelyFindObject(for: key, from: hashableType) == nil && string(for: key) == nil {
         if let stringValue = value as? String {
           set(string: stringValue, for: key)
         } else if let object = value as Any? {
@@ -155,16 +160,12 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
   // MARK: - Public Get Functions
   @objc
   public func bool(for key: String) -> Bool {
-    guard let number = object(for: key, ofClass: NSNumber.Type) as? NSNumber else {
-      assertionFailure("Unable to unarchive NSNumber")
-    }
-
-    return number.boolValue
+    return number(for: key).boolValue
   }
   
   @objc
   public func data(for key: String) -> Data? {
-    var error: Error
+    var error: Error?
     guard let  data = services.data(for: key, error: &error) else {
       handle(error: error)
       return nil
@@ -175,17 +176,17 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
   
   @objc
   public func double(for key: String) -> Double {
-    return (object(for: key, ofClass: NSNumber.self) as? NSNumber).doubleValue
+    return number(for: key).doubleValue
   }
   
   @objc
   public func float(for key: String) -> Float {
-    return (object(for: key, ofClass: NSNumber.self) as? NSNumber).floatValue
+    return number(for: key).floatValue
   }
   
   @objc
   public func integer(for key: String) -> Int {
-    return (object(for: key, ofClass: NSNumber.self) as? NSNumber).intValue
+    return number(for: key).intValue
   }
   
   @objc
@@ -198,27 +199,24 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
   }
   
   @objc
-  public func object(for key: String, ofClass: AnyHashable) -> Any? {
-    let classes: Set = [ofClass]
+  public func object(for key: String, ofClass aClass: AnyHashable) -> Any? {
+    let classes: Set = [aClass]
     return object(for: key, ofClasses: classes)
   }
   
   @objc
-  public func object(for key: String, ofClasses: Set<AnyHashable>) -> Any? {
+  public func object(for key: String, ofClasses classes: Set<AnyHashable>) -> Any? {
     guard let data = data(for: key) else { return nil }
     
-    guard let object = NSKeyedUnarchiver.lu_unarchiveObject(of: ofClasses, with: data) else {
+    guard let object = NSKeyedUnarchiver.lu_unarchiveObject(ofClasses: classes, with: data) else {
       let message = "Error while calling objectForKey: with key \(key)"
       let error = NSError(domain: LUKeychainAccessErrorDomain,
                           code: LUKeychainAccessError.LUKeychainAccessInvalidArchiveError.rawValue, userInfo:[NSLocalizedDescriptionKey: message])
       handle(error: error)
-    }
-    
-    guard let hashableObject = object as? AnyHashable else {
       return nil
     }
     
-    return hashableObject
+    return object
   }
   
   @objc
@@ -242,5 +240,21 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
     if errorHandler != nil {
       errorHandler?.keychainAccess(self, received: error)
     }
+  }
+  
+  private func number(for key: String) -> NSNumber {
+    guard let hashableNumber = NSNumber.self as? AnyHashable else {
+      assertionFailure("NSNumber does not conform to AnyHashable")
+      return 0
+    }
+    guard let object = object(for: key, ofClass: hashableNumber) else {
+      assertionFailure("Object not found for key \(key)")
+      return 0
+    }
+    guard let number = object as? NSNumber else {
+      return 0
+    }
+    
+    return number
   }
 }

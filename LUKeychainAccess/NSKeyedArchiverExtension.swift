@@ -8,7 +8,7 @@
 import Foundation
 
 @objc public extension NSKeyedArchiver {
-  @objc class func lu_archivedData(with object: AnyObject?) -> Data? {
+  @objc class func lu_archivedData(with object: Any?) -> Data? {
     guard let object = object else { return nil }
 
     if let data = try? archivedData(withRootObject: object, requiringSecureCoding: false) {

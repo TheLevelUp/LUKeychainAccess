@@ -23,11 +23,15 @@ import Foundation
     case .afterFirstUnlockThisDeviceOnly:
       return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
     case .always:
-      return kSecAttrAccessibleAlways
+      // Now defaults to after first unlock this device only due to
+      // deprecation of .always in iOS12.0
+      return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
     case .never:
       return nil
     case .alwaysThisDeviceOnly:
-      return kSecAttrAccessibleAlwaysThisDeviceOnly
+      // Now defaults to after first unlock this device only due to
+      // deprecation of .alwaysThisDeviceOnly in iOS12.0
+      return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
     case .whenUnlocked:
       return kSecAttrAccessibleWhenUnlocked
     case .whenUnlockedThisDeviceOnly:
