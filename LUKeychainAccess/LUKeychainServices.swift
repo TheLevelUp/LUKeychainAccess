@@ -8,14 +8,16 @@
 
 import Foundation
 
-class LUKeychainServices {
+@objc
+class LUKeychainServices: NSObject {
   internal var service: String?
-  internal var accessGroup: String?
+  @objc public var accessGroup: String?
   internal var accessibilityState: LUKeychainAccessibility = .whenUnlocked
-  internal var additionalQueryParams: [String: Any]? = nil
+  @objc public var additionalQueryParams: [String: Any]? = nil
   
   // MARK: - Singleton
 
+  @objc
   public class var keychainServices: LUKeychainServices {
     return sharedKeychainServices
   }
@@ -26,21 +28,25 @@ class LUKeychainServices {
   
   // MARK: - Public Write Functions
   
-  func add(_ data: Data, for key: String, error:inout Error?) -> Bool {
+  @objc (addData:forKey:error:) @discardableResult
+  public func add(_ data: Data, for key: String, error:  UnsafeMutablePointer<NSError?>?) -> Bool {
     var query = queryDictionary(for: key)
     query[kSecAttrAccessible as String] = accessibilityState.stateCFType
     query[kSecValueData as String] = data
     
     let status = SecItemAdd(query as CFDictionary, nil)
     guard status == noErr else {
-      error = self.error(from: status, description: "SecItemAdd with key \(key)")
+      if let errorPointer = error {
+        errorPointer.pointee = self.error(from: status, description: "SecItemAdd with key \(key)") as NSError
+      }
       return false
     }
     
     return true
   }
   
-  func data(for key: String, error: inout Error?) -> Data? {
+  @objc (dataForKey:error:)
+  public func data(for key: String, error:  UnsafeMutablePointer<NSError?>?) -> Data? {
     var query = queryDictionary(for: key)
     query[kSecMatchLimit as String] = kSecMatchLimitOne
     query[kSecReturnData as String] = kCFBooleanTrue
@@ -49,38 +55,47 @@ class LUKeychainServices {
     let status = SecItemCopyMatching(query as CFDictionary, &cfResult)
     
     guard status == noErr , let data = cfResult as? Data else {
-      error = self.error(from: status, description: "SecItemCopyMatching with key \(key)")
+      if let errorPointer = error {
+        errorPointer.pointee = self.error(from: status, description: "SecItemCopyMatching with key \(key)") as NSError
+      }
       return nil
     }
     
     return data
   }
   
-  func deleteAllItems(error: inout Error?) -> Bool {
+  @objc (deleteAllItemsWithError:) @discardableResult
+  public func deleteAllItems(error: UnsafeMutablePointer<NSError?>?) -> Bool {
     let query = [kSecClass: kSecClassGenericPassword]
     let status = SecItemDelete(query as CFDictionary)
     
     guard status == noErr else {
-      error = self.error(from: status, description: "SecItemDelete with no key")
+      if let errorPointer = error {
+        errorPointer.pointee = self.error(from: status, description: "SecItemDelete with no key") as NSError
+      }
       return false
     }
     
     return true
   }
   
-  func deleteItem(for key: String, error: inout Error?) -> Bool {
+  @objc (deleteItemWithKey:error:) @discardableResult
+  public func deleteItem(for key: String, error: UnsafeMutablePointer<NSError?>?) -> Bool {
     let query = queryDictionary(for: key)
     let status = SecItemDelete(query as CFDictionary)
     
     guard status == noErr else {
-      error = self.error(from: status, description: "SecItemDelete with key \(key)")
+      if let errorPointer = error {
+        errorPointer.pointee = self.error(from: status, description: "SecItemDelete with key \(key)") as NSError
+      }
       return false
     }
     
     return true
   }
   
-  func update(_ data: Data, for key: String, error: inout Error?) -> Bool {
+  @objc (updateData:forKey:error:) @discardableResult
+  func update(_ data: Data, for key: String, error: UnsafeMutablePointer<NSError?>?) -> Bool {
     var query = queryDictionary(for: key)
     query[kSecValueData as String] = data
     
@@ -92,8 +107,9 @@ kSecAttrAccessible: accessibilityState.stateCFType] as [CFString : Any?]
                                updateQuery as CFDictionary)
     
     guard status == noErr else {
-      error = self.error(from: status, descriptionFormat: "SecItemUpdate with key %@ and data %@", args: key, data  as CVarArg)
-      
+      if let errorPointer = error {
+        errorPointer.pointee = self.error(from: status, descriptionFormat: "SecItemUpdate with key %@ and data %@", args: key, data  as CVarArg) as NSError
+      }
       return false
     }
     

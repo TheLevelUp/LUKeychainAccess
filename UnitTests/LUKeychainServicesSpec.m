@@ -33,7 +33,7 @@ describe(@"LUKeychainServices", ^{
 
   describe(@"deleting items", ^{
     beforeEach(^{
-      [keychainServices addData:data forKey:key error:nil];
+     [keychainServices addData:data forKey:key error:nil];
       [keychainServices addData:anotherData forKey:anotherKey error:nil];
     });
 

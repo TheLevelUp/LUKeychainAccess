@@ -10,24 +10,23 @@ import Foundation
 
 public let LUKeychainAccessVersionNumber = 0.0
 public let LUKeychainAccessVersionString = ""
-public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
 
 @objc public class LUKeychainAccess: NSObject {
   
-  // MARK: - Singleton
+  // MARK: - Instance Access
   @objc
   public class var standardKeychainAccess: LUKeychainAccess {
-    return sharedKeychainAccess
+    return LUKeychainAccess()
   }
   
-  private static var sharedKeychainAccess: LUKeychainAccess = {
-      return LUKeychainAccess()
-  }()
-  
-  // MARK: - Settable Properties
+  // MARK: - Public Static Properties
+  @objc
+  public static let errorDomain = "LUKeychainAccessErrorDomain"
+
+  // MARK: - Public Settable Properties
   @objc public var errorHandler: LUKeychainErrorHandler?
   
-  // MARK: - Computed Properties
+  // MARK: - Public Computed Properties
   @objc
   public var accessGroup: String? { return services.accessGroup }
   @objc
@@ -36,14 +35,14 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
   public var additionalQueryParams: [String: Any]? { services.additionalQueryParams }
   @objc
   public var service: String? { return services.service }
-
+  
   // MARK: - Private Properties
   private var services = LUKeychainServices.keychainServices
   
   // MARK: - Public Delete Functions
-  @objc
+  @objc @discardableResult
   public func deleteAll() -> Bool {
-    var error: Error?
+    var error: NSError?
     guard services.deleteAllItems(error: &error) else {
       handle(error: error)
       return false
@@ -52,33 +51,33 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
     return true
   }
   
-  @objc
+  @objc (deleteObjectForKey:)
   public func deleteObject(for key: String) {
-    var error: Error?
+    var error: NSError?
     if !services.deleteItem(for: key, error: &error) {
       handle(error: error)
     }
   }
   
   // MARK: - Public Config Functions
-  @objc
+  @objc (setAccessGroup:)
   public func set(accessGroup: String) {
     services.accessGroup = accessGroup
   }
   
-  @objc
+  @objc (setAccessibilityState:)
   public func set(accessibilityState: LUKeychainAccessibility) {
     services.accessibilityState = accessibilityState
   }
   
-  @objc
+  @objc (setAdditionalQueryParams:)
   public func set(additionalQueryParams: [String: Any]) {
     services.additionalQueryParams = additionalQueryParams
   }
   
   // MARK: - Public Set Functions
   
-  @objc
+  @objc (registerDefaults:)
   public func register(defaults: [String: Any]) {
     for (key, value) in defaults {
       guard let hashableType = type(of: value) as? AnyHashable else {
@@ -98,23 +97,23 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
     }
   }
   
-  @objc
+  @objc (setBool:forKey:)
   public func set(bool: Bool, for key: String) {
     set(object: NSNumber(value: bool), for: key)
   }
   
-  @objc
+  @objc (setData:forKey:)
   public func set(data: Data?, for key: String) {
     guard let data = data else {
       deleteObject(for: key)
       return
     }
     
-    var error: Error?
+    var error: NSError?
     var success = services.add(data, for: key, error: &error)
     
     if !success {
-      if let nSError = error as? NSError, nSError.code == errSecDuplicateItem {
+      if let nSError = error, nSError.code == errSecDuplicateItem {
         error = nil
         success = services.update(data, for: key, error: &error)
       }
@@ -123,22 +122,22 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
     }
   }
   
-  @objc
+  @objc (setDouble:forKey:)
   public func set(double: Double, for key: String) {
     set(object: NSNumber(value: double), for: key)
   }
   
-  @objc
+  @objc (setFloat:forKey:)
   public func set(float: Float, for key: String) {
     set(object: NSNumber(value: float), for: key)
   }
   
-  @objc
+  @objc (setInteger:forKey:)
   public func set(integer: Int, for key: String) {
     set(object: NSNumber(integerLiteral: integer), for: key)
   }
   
-  @objc
+  @objc (setString:forKey:)
   public func set(string: String, for key: String) {
     guard let data = string.data(using: String.Encoding.utf8) else {
       assertionFailure("Unable to encode string")
@@ -147,7 +146,7 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
     set(data: data, for: key)
   }
   
-  @objc
+  @objc (setObject:forKey:)
   public func set(object: Any, for key: String) {
     guard let data: Data = NSKeyedArchiver.lu_archivedData(with: object) else {
       assertionFailure("Unable to archive with root object")
@@ -158,14 +157,14 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
   }
   
   // MARK: - Public Get Functions
-  @objc
+  @objc (boolForKey:) @discardableResult
   public func bool(for key: String) -> Bool {
     return number(for: key).boolValue
   }
   
-  @objc
+  @objc (dataForKey:) @discardableResult
   public func data(for key: String) -> Data? {
-    var error: Error?
+    var error: NSError?
     guard let  data = services.data(for: key, error: &error) else {
       handle(error: error)
       return nil
@@ -174,22 +173,22 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
     return data
   }
   
-  @objc
+  @objc (doubleForKey:) 
   public func double(for key: String) -> Double {
     return number(for: key).doubleValue
   }
   
-  @objc
+  @objc (floatForKey:)
   public func float(for key: String) -> Float {
     return number(for: key).floatValue
   }
   
-  @objc
+  @objc (integerForKey:)
   public func integer(for key: String) -> Int {
     return number(for: key).intValue
   }
   
-  @objc
+  @objc (stringForKey:)
   public func string(for key: String) -> String? {
     guard let data = data(for: key) else {
       return nil
@@ -198,19 +197,19 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
     return String(data: data, encoding: String.Encoding.utf8)
   }
   
-  @objc
+  @objc (objectForKey:ofClass:)
   public func object(for key: String, ofClass aClass: AnyHashable) -> Any? {
     let classes: Set = [aClass]
     return object(for: key, ofClasses: classes)
   }
   
-  @objc
+  @objc (objectForKey:ofClasses:)
   public func object(for key: String, ofClasses classes: Set<AnyHashable>) -> Any? {
     guard let data = data(for: key) else { return nil }
     
     guard let object = NSKeyedUnarchiver.lu_unarchiveObject(ofClasses: classes, with: data) else {
       let message = "Error while calling objectForKey: with key \(key)"
-      let error = NSError(domain: LUKeychainAccessErrorDomain,
+      let error = NSError(domain: LUKeychainAccess.errorDomain,
                           code: LUKeychainAccessError.LUKeychainAccessInvalidArchiveError.rawValue, userInfo:[NSLocalizedDescriptionKey: message])
       handle(error: error)
       return nil
@@ -219,7 +218,7 @@ public let LUKeychainAccessErrorDomain = "LUKeychainAccessErrorDomain"
     return object
   }
   
-  @objc
+  @objc (recursivelyFindObjectForKey:fromClass:)
   public func recursivelyFindObject(for key: String, from aClass: AnyHashable) -> Any? {
     if let result = object(for: key, ofClass: aClass) {
       return result

@@ -1,9 +1,8 @@
-#import <LUKeychainAccess/LUKeychainAccess.h>
+@import LUKeychainAccess;
 #import <Kiwi/Kiwi.h>
 #import "LUTestErrorHandler.h"
 #import "LUTestNonNSCodingCompliantObject.h"
 #import "LUTestNSCodingCompliantObject.h"
-#import "NSKeyedArchiver+Additions.h"
 
 SPEC_BEGIN(LUKeychainAccessSpec)
 
@@ -18,7 +17,7 @@ describe(@"LUKeychainAccess", ^{
   id (^errorReturningBlock)(NSArray *) = ^id(NSArray *params) {
     __autoreleasing NSError **error;
     [(NSValue *)[params lastObject] getValue:&error];
-    *error = [NSError errorWithDomain:LUKeychainAccessErrorDomain code:errSecDuplicateItem userInfo:nil];
+    *error = [NSError errorWithDomain:LUKeychainAccess.errorDomain code:errSecDuplicateItem userInfo:nil];
 
     return [KWValue valueWithBool:NO];
   };
@@ -93,10 +92,12 @@ describe(@"LUKeychainAccess", ^{
 
   describe(@"accessGroup", ^{
     beforeEach(^{
+      // May not work
       [keychainServices stub:@selector(accessGroup) andReturn:testGroup];
     });
 
     it(@"returns the accessGroup of keychain services", ^{
+      // Test may always fail
       [[keychainAccess.accessGroup should] equal:testGroup];
     });
   });
@@ -143,7 +144,7 @@ describe(@"LUKeychainAccess", ^{
       });
 
       it(@"notifies the error handler", ^{
-        [keychainAccess dataForKey:key];
+        NSData *data = [keychainAccess dataForKey:key];
 
         [[errorHandler.lastError shouldNot] beNil];
       });
@@ -216,7 +217,7 @@ describe(@"LUKeychainAccess", ^{
         [keychainAccess stub:@selector(dataForKey:)
                    andReturn:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject]
                withArguments:key];
-        [keychainAccess objectForKey:key ofClasses:[NSSet setWithArray:@[[NSArray class]]]];
+        id object = [keychainAccess objectForKey:key ofClasses:[NSSet setWithArray:@[[NSArray class]]]];
 
         [[errorHandler.lastError shouldNot] beNil];
       });

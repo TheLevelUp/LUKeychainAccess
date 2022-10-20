@@ -23,21 +23,12 @@
 		F0CC696128DB1FEB0078DB71 /* LUKeychainErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC696028DB1FEB0078DB71 /* LUKeychainErrorHandler.swift */; };
 		F0CC696328DB22800078DB71 /* NSKeyedArchiverExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC696228DB22800078DB71 /* NSKeyedArchiverExtension.swift */; };
 		F0CC696528DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC696428DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift */; };
-		F69ACBEA22A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = F69ACBE822A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h */; };
-		F69ACBEB22A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F69ACBE922A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m */; };
-		F69ACBEE22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = F69ACBEC22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h */; };
-		F69ACBEF22A5B7CA00F48886 /* NSKeyedArchiver+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F69ACBED22A5B7CA00F48886 /* NSKeyedArchiver+Additions.m */; };
 		F6B0FEEE22A89D8F00115793 /* LUKeychainAccessSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B0FEEA22A89D8F00115793 /* LUKeychainAccessSpec.m */; };
 		F6B0FEEF22A89D8F00115793 /* LUKeychainServicesSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B0FEEB22A89D8F00115793 /* LUKeychainServicesSpec.m */; };
 		F6B0FEF422A89EAE00115793 /* LUTestErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B0FEF122A89EAE00115793 /* LUTestErrorHandler.m */; };
 		F6B0FEF522A89EAE00115793 /* LUTestNSCodingCompliantObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B0FEF322A89EAE00115793 /* LUTestNSCodingCompliantObject.m */; };
 		F6B0FEF822A89F8500115793 /* LUTestNonNSCodingCompliantObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B0FEF722A89F8500115793 /* LUTestNonNSCodingCompliantObject.m */; };
-		F8120D2C1B065C32004EBEF3 /* LUKeychainAccessAccessibility.h in Headers */ = {isa = PBXBuildFile; fileRef = F8120D2B1B065C32004EBEF3 /* LUKeychainAccessAccessibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F8B3FC251B027D4A008AF919 /* LUKeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 0226874A16BAD892008FC8FA /* LUKeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F8B3FC261B027D52008AF919 /* LUKeychainAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 0226874C16BAD892008FC8FA /* LUKeychainAccess.m */; };
-		F8B3FC271B027D52008AF919 /* LUKeychainErrorHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 02ABC53118087D0100A13931 /* LUKeychainErrorHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F8B3FC281B027D52008AF919 /* LUKeychainServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 028CCA1F18084AAF00267911 /* LUKeychainServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F8B3FC291B027D52008AF919 /* LUKeychainServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CCA2018084AAF00267911 /* LUKeychainServices.m */; };
 		F8B3FC2A1B027D6D008AF919 /* LUKeychainAccess-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 0226874916BAD892008FC8FA /* LUKeychainAccess-Prefix.pch */; };
 		F8B3FC2C1B027DE1008AF919 /* LUKeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B3FC0C1B027CBA008AF919 /* LUKeychainAccess.framework */; };
 /* End PBXBuildFile section */
@@ -63,13 +54,9 @@
 		0226874516BAD892008FC8FA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0226874916BAD892008FC8FA /* LUKeychainAccess-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LUKeychainAccess-Prefix.pch"; sourceTree = "<group>"; };
 		0226874A16BAD892008FC8FA /* LUKeychainAccess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LUKeychainAccess.h; sourceTree = "<group>"; };
-		0226874C16BAD892008FC8FA /* LUKeychainAccess.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LUKeychainAccess.m; sourceTree = "<group>"; };
 		0226875316BAD892008FC8FA /* UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0226877016BAD99F008FC8FA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0226877316BADA41008FC8FA /* libPods-test.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-test.a"; path = "Pods/build/Release-iphoneos/libPods-test.a"; sourceTree = "<group>"; };
-		028CCA1F18084AAF00267911 /* LUKeychainServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUKeychainServices.h; sourceTree = "<group>"; };
-		028CCA2018084AAF00267911 /* LUKeychainServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainServices.m; sourceTree = "<group>"; };
-		02ABC53118087D0100A13931 /* LUKeychainErrorHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LUKeychainErrorHandler.h; sourceTree = "<group>"; };
 		3E9010F1E85AC2488BD49F29 /* Pods-UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UnitTests/Pods-UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6AC1AB091E0766DD00E699C9 /* Testing App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Testing App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AC1AB0C1E0766DD00E699C9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -90,10 +77,6 @@
 		F0CC696028DB1FEB0078DB71 /* LUKeychainErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainErrorHandler.swift; sourceTree = "<group>"; };
 		F0CC696228DB22800078DB71 /* NSKeyedArchiverExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSKeyedArchiverExtension.swift; sourceTree = "<group>"; };
 		F0CC696428DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSKeyedUnarchiverExtension.swift; sourceTree = "<group>"; };
-		F69ACBE822A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSKeyedUnarchiver+Additions.h"; sourceTree = "<group>"; };
-		F69ACBE922A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSKeyedUnarchiver+Additions.m"; sourceTree = "<group>"; };
-		F69ACBEC22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSKeyedArchiver+Additions.h"; sourceTree = "<group>"; };
-		F69ACBED22A5B7CA00F48886 /* NSKeyedArchiver+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSKeyedArchiver+Additions.m"; sourceTree = "<group>"; };
 		F6B0FEEA22A89D8F00115793 /* LUKeychainAccessSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainAccessSpec.m; sourceTree = "<group>"; };
 		F6B0FEEB22A89D8F00115793 /* LUKeychainServicesSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUKeychainServicesSpec.m; sourceTree = "<group>"; };
 		F6B0FEF022A89EAE00115793 /* LUTestErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUTestErrorHandler.h; sourceTree = "<group>"; };
@@ -102,7 +85,6 @@
 		F6B0FEF322A89EAE00115793 /* LUTestNSCodingCompliantObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUTestNSCodingCompliantObject.m; sourceTree = "<group>"; };
 		F6B0FEF622A89F8500115793 /* LUTestNonNSCodingCompliantObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUTestNonNSCodingCompliantObject.h; sourceTree = "<group>"; };
 		F6B0FEF722A89F8500115793 /* LUTestNonNSCodingCompliantObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUTestNonNSCodingCompliantObject.m; sourceTree = "<group>"; };
-		F8120D2B1B065C32004EBEF3 /* LUKeychainAccessAccessibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUKeychainAccessAccessibility.h; sourceTree = "<group>"; };
 		F8B3FC0C1B027CBA008AF919 /* LUKeychainAccess.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LUKeychainAccess.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8B3FC2B1B027D9D008AF919 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -234,15 +216,6 @@
 			isa = PBXGroup;
 			children = (
 				0226874A16BAD892008FC8FA /* LUKeychainAccess.h */,
-				0226874C16BAD892008FC8FA /* LUKeychainAccess.m */,
-				F8120D2B1B065C32004EBEF3 /* LUKeychainAccessAccessibility.h */,
-				02ABC53118087D0100A13931 /* LUKeychainErrorHandler.h */,
-				028CCA1F18084AAF00267911 /* LUKeychainServices.h */,
-				028CCA2018084AAF00267911 /* LUKeychainServices.m */,
-				F69ACBEC22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h */,
-				F69ACBED22A5B7CA00F48886 /* NSKeyedArchiver+Additions.m */,
-				F69ACBE822A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h */,
-				F69ACBE922A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m */,
 			);
 			name = Deprecated;
 			sourceTree = "<group>";
@@ -285,13 +258,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F8B3FC281B027D52008AF919 /* LUKeychainServices.h in Headers */,
 				F8B3FC251B027D4A008AF919 /* LUKeychainAccess.h in Headers */,
-				F8120D2C1B065C32004EBEF3 /* LUKeychainAccessAccessibility.h in Headers */,
-				F69ACBEE22A5B7CA00F48886 /* NSKeyedArchiver+Additions.h in Headers */,
 				F8B3FC2A1B027D6D008AF919 /* LUKeychainAccess-Prefix.pch in Headers */,
-				F8B3FC271B027D52008AF919 /* LUKeychainErrorHandler.h in Headers */,
-				F69ACBEA22A5B32D00F48886 /* NSKeyedUnarchiver+Additions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,13 +445,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F52EF1F28EC1DCA00738A74 /* LUKeychainServices.swift in Sources */,
-				F8B3FC291B027D52008AF919 /* LUKeychainServices.m in Sources */,
 				F0CC696128DB1FEB0078DB71 /* LUKeychainErrorHandler.swift in Sources */,
-				F8B3FC261B027D52008AF919 /* LUKeychainAccess.m in Sources */,
 				9F52EF2128EC314400738A74 /* LUKeychainAccessError.swift in Sources */,
-				F69ACBEB22A5B32D00F48886 /* NSKeyedUnarchiver+Additions.m in Sources */,
 				F0CC695D28DADE560078DB71 /* LUKeychainAccess.swift in Sources */,
-				F69ACBEF22A5B7CA00F48886 /* NSKeyedArchiver+Additions.m in Sources */,
 				F0CC695F28DB1DE80078DB71 /* LUKeychainAccessibility.swift in Sources */,
 				F0CC696528DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift in Sources */,
 				F0CC696328DB22800078DB71 /* NSKeyedArchiverExtension.swift in Sources */,

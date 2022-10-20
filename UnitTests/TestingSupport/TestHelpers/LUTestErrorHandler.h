@@ -1,4 +1,4 @@
-#import "LUKeychainErrorHandler.h"
+@import LUKeychainAccess;
 
 @interface LUTestErrorHandler : NSObject <LUKeychainErrorHandler>
 
