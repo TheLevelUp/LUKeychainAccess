@@ -124,14 +124,15 @@ kSecAttrAccessible: accessibilityState.stateCFType] as [CFString : Any?]
   
   private func error(from status: OSStatus, descriptionFormat: String, args : CVarArg...) -> Error {
    var callerDescription: String = ""
-    withVaList(args) {
-      callerDescription = String(format: descriptionFormat, $0 as! CVarArg)
-    }
-    
+    // TODO:
+//    withVaList(args) {
+//      callerDescription = NSLogv(descriptionFormat, $0)
+//    }
+//
     let message = errorMessage(from: status)
     let description = "Error while calling \(callerDescription): \(message)"
-    
-    return NSError(domain: NSOSStatusErrorDomain, code: Int(status), userInfo:[NSLocalizedDescriptionKey: description]) as Error
+//
+    return  NSError(domain: NSOSStatusErrorDomain, code: Int(status), userInfo:[NSLocalizedDescriptionKey: description]) as Error
   }
   
   private func errorMessage(from status: OSStatus) -> String {

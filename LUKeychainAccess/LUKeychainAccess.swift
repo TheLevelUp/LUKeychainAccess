@@ -80,12 +80,12 @@ public let LUKeychainAccessVersionString = ""
   @objc (registerDefaults:)
   public func register(defaults: [String: Any]) {
     for (key, value) in defaults {
-      guard let hashableType = type(of: value) as? AnyHashable else {
+      guard let classOfValue = type(of: value) as? AnyClass else {
         assertionFailure("Type \(type(of: value)) does not conform to AnyHashable")
         return
       }
       
-      if recursivelyFindObject(for: key, from: hashableType) == nil && string(for: key) == nil {
+      if recursivelyFindObject(for: key, from: classOfValue.self) == nil && string(for: key) == nil {
         if let stringValue = value as? String {
           set(string: stringValue, for: key)
         } else if let object = value as Any? {
@@ -198,13 +198,13 @@ public let LUKeychainAccessVersionString = ""
   }
   
   @objc (objectForKey:ofClass:)
-  public func object(for key: String, ofClass aClass: AnyHashable) -> Any? {
-    let classes: Set = [aClass]
+  public func object(for key: String, ofClass aClass: AnyClass) -> Any? {
+    let classes: [String: AnyClass] = [String(describing: type(of: aClass.self)) :aClass]
     return object(for: key, ofClasses: classes)
   }
   
   @objc (objectForKey:ofClasses:)
-  public func object(for key: String, ofClasses classes: Set<AnyHashable>) -> Any? {
+  public func object(for key: String, ofClasses classes: [String: AnyClass]) -> Any? {
     guard let data = data(for: key) else { return nil }
     
     guard let object = NSKeyedUnarchiver.lu_unarchiveObject(ofClasses: classes, with: data) else {
@@ -219,15 +219,13 @@ public let LUKeychainAccessVersionString = ""
   }
   
   @objc (recursivelyFindObjectForKey:fromClass:)
-  public func recursivelyFindObject(for key: String, from aClass: AnyHashable) -> Any? {
-    if let result = object(for: key, ofClass: aClass) {
+  public func recursivelyFindObject(for key: String, from aClass: AnyClass) -> Any? {
+    if let result = object(for: key, ofClass: aClass.self) {
       return result
     }
     
-    if let hashableClass = aClass as? AnyClass,
-       let aSuperclass = hashableClass.superclass as? AnyHashable,
-       hashableClass.self != NSObject.self {
-      return recursivelyFindObject(for: key, from: aSuperclass)
+    if aClass.self != NSObject.self {
+      return recursivelyFindObject(for: key, from: aClass)
     }
     
     return nil
@@ -242,12 +240,8 @@ public let LUKeychainAccessVersionString = ""
   }
   
   private func number(for key: String) -> NSNumber {
-    guard let hashableNumber = NSNumber.self as? AnyHashable else {
-      assertionFailure("NSNumber does not conform to AnyHashable")
-      return 0
-    }
-    guard let object = object(for: key, ofClass: hashableNumber) else {
-      assertionFailure("Object not found for key \(key)")
+    guard let object = object(for: key, ofClass: NSNumber.self) else {
+//      assertionFailure("Object not found for key \(key)")
       return 0
     }
     guard let number = object as? NSNumber else {
