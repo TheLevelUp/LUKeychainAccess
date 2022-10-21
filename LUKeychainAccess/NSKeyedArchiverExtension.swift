@@ -7,15 +7,17 @@
 
 import Foundation
 
-@objc public extension NSKeyedArchiver {
+extension NSKeyedArchiver {
   @objc (lu_archivedDataWithRootObject:)
   class func lu_archivedData(with object: Any?) -> Data? {
     guard let object = object else { return nil }
 
-    if let data = try? archivedData(withRootObject: object, requiringSecureCoding: false) {
-      return data
+    do {
+      return try archivedData(withRootObject: object, requiringSecureCoding: false)
+    } catch let error {
+      assertionFailure("Failure archiving data withRootObject \(object) with error \(error)")
     }
-    
+
     return nil
   }
 }

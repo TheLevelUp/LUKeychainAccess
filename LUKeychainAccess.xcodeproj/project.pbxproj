@@ -18,6 +18,9 @@
 		6AC1AB1B1E0766DD00E699C9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AC1AB191E0766DD00E699C9 /* LaunchScreen.storyboard */; };
 		9F52EF1F28EC1DCA00738A74 /* LUKeychainServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F52EF1E28EC1DCA00738A74 /* LUKeychainServices.swift */; };
 		9F52EF2128EC314400738A74 /* LUKeychainAccessError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F52EF2028EC314400738A74 /* LUKeychainAccessError.swift */; };
+		9FC186BE29027BE100C2FEA5 /* ClassIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC186BD29027BE100C2FEA5 /* ClassIdentifier.swift */; };
+		9FC186C52902986900C2FEA5 /* LUKeychainArchiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC186C42902986900C2FEA5 /* LUKeychainArchiveError.swift */; };
+		9FC186C72902988300C2FEA5 /* LUKeychainUnarchiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC186C62902988300C2FEA5 /* LUKeychainUnarchiveError.swift */; };
 		F0CC695D28DADE560078DB71 /* LUKeychainAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC695C28DADE560078DB71 /* LUKeychainAccess.swift */; };
 		F0CC695F28DB1DE80078DB71 /* LUKeychainAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC695E28DB1DE80078DB71 /* LUKeychainAccessibility.swift */; };
 		F0CC696128DB1FEB0078DB71 /* LUKeychainErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC696028DB1FEB0078DB71 /* LUKeychainErrorHandler.swift */; };
@@ -29,7 +32,6 @@
 		F6B0FEF522A89EAE00115793 /* LUTestNSCodingCompliantObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B0FEF322A89EAE00115793 /* LUTestNSCodingCompliantObject.m */; };
 		F6B0FEF822A89F8500115793 /* LUTestNonNSCodingCompliantObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B0FEF722A89F8500115793 /* LUTestNonNSCodingCompliantObject.m */; };
 		F8B3FC251B027D4A008AF919 /* LUKeychainAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 0226874A16BAD892008FC8FA /* LUKeychainAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F8B3FC2A1B027D6D008AF919 /* LUKeychainAccess-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 0226874916BAD892008FC8FA /* LUKeychainAccess-Prefix.pch */; };
 		F8B3FC2C1B027DE1008AF919 /* LUKeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B3FC0C1B027CBA008AF919 /* LUKeychainAccess.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,9 +54,8 @@
 
 /* Begin PBXFileReference section */
 		0226874516BAD892008FC8FA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		0226874916BAD892008FC8FA /* LUKeychainAccess-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LUKeychainAccess-Prefix.pch"; sourceTree = "<group>"; };
 		0226874A16BAD892008FC8FA /* LUKeychainAccess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LUKeychainAccess.h; sourceTree = "<group>"; };
-		0226875316BAD892008FC8FA /* UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0226875316BAD892008FC8FA /* Objective-C UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Objective-C UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0226877016BAD99F008FC8FA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0226877316BADA41008FC8FA /* libPods-test.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-test.a"; path = "Pods/build/Release-iphoneos/libPods-test.a"; sourceTree = "<group>"; };
 		3E9010F1E85AC2488BD49F29 /* Pods-UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UnitTests/Pods-UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -71,6 +72,9 @@
 		842FC9C859A7E9A307878E6E /* Pods-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnitTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-UnitTests/Pods-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
 		9F52EF1E28EC1DCA00738A74 /* LUKeychainServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainServices.swift; sourceTree = "<group>"; };
 		9F52EF2028EC314400738A74 /* LUKeychainAccessError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainAccessError.swift; sourceTree = "<group>"; };
+		9FC186BD29027BE100C2FEA5 /* ClassIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassIdentifier.swift; sourceTree = "<group>"; };
+		9FC186C42902986900C2FEA5 /* LUKeychainArchiveError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainArchiveError.swift; sourceTree = "<group>"; };
+		9FC186C62902988300C2FEA5 /* LUKeychainUnarchiveError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainUnarchiveError.swift; sourceTree = "<group>"; };
 		D26BFC4B2590FA2455F402DB /* libPods-UnitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-UnitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0CC695C28DADE560078DB71 /* LUKeychainAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainAccess.swift; sourceTree = "<group>"; };
 		F0CC695E28DB1DE80078DB71 /* LUKeychainAccessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LUKeychainAccessibility.swift; sourceTree = "<group>"; };
@@ -123,7 +127,7 @@
 			children = (
 				0226874716BAD892008FC8FA /* LUKeychainAccess */,
 				6AC1AB0A1E0766DD00E699C9 /* Testing App */,
-				F6B0FEE222A89D8F00115793 /* UnitTests */,
+				F6B0FEE222A89D8F00115793 /* Objective-C UnitTests */,
 				0226874416BAD892008FC8FA /* Frameworks */,
 				05D24E13073B326301AC9391 /* Pods */,
 				0226874316BAD892008FC8FA /* Products */,
@@ -136,7 +140,7 @@
 		0226874316BAD892008FC8FA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0226875316BAD892008FC8FA /* UnitTests.xctest */,
+				0226875316BAD892008FC8FA /* Objective-C UnitTests.xctest */,
 				F8B3FC0C1B027CBA008AF919 /* LUKeychainAccess.framework */,
 				6AC1AB091E0766DD00E699C9 /* Testing App.app */,
 			);
@@ -166,6 +170,9 @@
 				F0CC696428DB3E4B0078DB71 /* NSKeyedUnarchiverExtension.swift */,
 				F0CC695B28DADE380078DB71 /* Deprecated */,
 				0226874816BAD892008FC8FA /* Supporting Files */,
+				9FC186BD29027BE100C2FEA5 /* ClassIdentifier.swift */,
+				9FC186C42902986900C2FEA5 /* LUKeychainArchiveError.swift */,
+				9FC186C62902988300C2FEA5 /* LUKeychainUnarchiveError.swift */,
 			);
 			path = LUKeychainAccess;
 			sourceTree = "<group>";
@@ -174,7 +181,6 @@
 			isa = PBXGroup;
 			children = (
 				F8B3FC2B1B027D9D008AF919 /* Info.plist */,
-				0226874916BAD892008FC8FA /* LUKeychainAccess-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -212,6 +218,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		9FC186C32902967200C2FEA5 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				F6B0FEEA22A89D8F00115793 /* LUKeychainAccessSpec.m */,
+				F6B0FEEB22A89D8F00115793 /* LUKeychainServicesSpec.m */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		F0CC695B28DADE380078DB71 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,25 +235,16 @@
 			name = Deprecated;
 			sourceTree = "<group>";
 		};
-		F6B0FEE222A89D8F00115793 /* UnitTests */ = {
+		F6B0FEE222A89D8F00115793 /* Objective-C UnitTests */ = {
 			isa = PBXGroup;
 			children = (
-				F6B0FEE322A89D8F00115793 /* TestingSupport */,
-				F6B0FEEA22A89D8F00115793 /* LUKeychainAccessSpec.m */,
-				F6B0FEEB22A89D8F00115793 /* LUKeychainServicesSpec.m */,
+				F6B0FEE422A89D8F00115793 /* Helpers */,
+				9FC186C32902967200C2FEA5 /* Tests */,
 			);
-			path = UnitTests;
+			path = "Objective-C UnitTests";
 			sourceTree = "<group>";
 		};
-		F6B0FEE322A89D8F00115793 /* TestingSupport */ = {
-			isa = PBXGroup;
-			children = (
-				F6B0FEE422A89D8F00115793 /* TestHelpers */,
-			);
-			path = TestingSupport;
-			sourceTree = "<group>";
-		};
-		F6B0FEE422A89D8F00115793 /* TestHelpers */ = {
+		F6B0FEE422A89D8F00115793 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
 				F6B0FEF022A89EAE00115793 /* LUTestErrorHandler.h */,
@@ -248,7 +254,7 @@
 				F6B0FEF222A89EAE00115793 /* LUTestNSCodingCompliantObject.h */,
 				F6B0FEF322A89EAE00115793 /* LUTestNSCodingCompliantObject.m */,
 			);
-			path = TestHelpers;
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,16 +265,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8B3FC251B027D4A008AF919 /* LUKeychainAccess.h in Headers */,
-				F8B3FC2A1B027D6D008AF919 /* LUKeychainAccess-Prefix.pch in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		0226875216BAD892008FC8FA /* UnitTests */ = {
+		0226875216BAD892008FC8FA /* Objective-C UnitTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0226876A16BAD892008FC8FA /* Build configuration list for PBXNativeTarget "UnitTests" */;
+			buildConfigurationList = 0226876A16BAD892008FC8FA /* Build configuration list for PBXNativeTarget "Objective-C UnitTests" */;
 			buildPhases = (
 				FD9B7D990B2F124898AB3BA2 /* [CP] Check Pods Manifest.lock */,
 				0226874E16BAD892008FC8FA /* Sources */,
@@ -281,9 +286,9 @@
 				6A9EC1B11E0709C600416708 /* PBXTargetDependency */,
 				6AC1AB211E0766E900E699C9 /* PBXTargetDependency */,
 			);
-			name = UnitTests;
+			name = "Objective-C UnitTests";
 			productName = LUKeychainAccessTests;
-			productReference = 0226875316BAD892008FC8FA /* UnitTests.xctest */;
+			productReference = 0226875316BAD892008FC8FA /* Objective-C UnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		6AC1AB081E0766DD00E699C9 /* Testing App */ = {
@@ -332,6 +337,7 @@
 				ORGANIZATIONNAME = SCVNGR;
 				TargetAttributes = {
 					0226875216BAD892008FC8FA = {
+						LastSwiftMigration = 1400;
 						TestTargetID = 6AC1AB081E0766DD00E699C9;
 					};
 					6AC1AB081E0766DD00E699C9 = {
@@ -359,7 +365,7 @@
 			projectRoot = "";
 			targets = (
 				F8B3FC0B1B027CBA008AF919 /* LUKeychainAccess */,
-				0226875216BAD892008FC8FA /* UnitTests */,
+				0226875216BAD892008FC8FA /* Objective-C UnitTests */,
 				6AC1AB081E0766DD00E699C9 /* Testing App */,
 			);
 		};
@@ -445,7 +451,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F52EF1F28EC1DCA00738A74 /* LUKeychainServices.swift in Sources */,
+				9FC186C72902988300C2FEA5 /* LUKeychainUnarchiveError.swift in Sources */,
+				9FC186BE29027BE100C2FEA5 /* ClassIdentifier.swift in Sources */,
 				F0CC696128DB1FEB0078DB71 /* LUKeychainErrorHandler.swift in Sources */,
+				9FC186C52902986900C2FEA5 /* LUKeychainArchiveError.swift in Sources */,
 				9F52EF2128EC314400738A74 /* LUKeychainAccessError.swift in Sources */,
 				F0CC695D28DADE560078DB71 /* LUKeychainAccess.swift in Sources */,
 				F0CC695F28DB1DE80078DB71 /* LUKeychainAccessibility.swift in Sources */,
@@ -569,6 +578,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_VERSION = 3.1.0;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -594,9 +604,12 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "LUKeychainAccess/LUKeychainAccess-Prefix.pch";
 				INFOPLIST_FILE = LUKeychainAccess/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "UnitTests/UnitTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Testing App.app/Testing App";
 			};
 			name = Debug;
@@ -609,9 +622,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "LUKeychainAccess/LUKeychainAccess-Prefix.pch";
 				INFOPLIST_FILE = LUKeychainAccess/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "UnitTests/UnitTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Testing App.app/Testing App";
 			};
 			name = Release;
@@ -759,7 +774,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0226876A16BAD892008FC8FA /* Build configuration list for PBXNativeTarget "UnitTests" */ = {
+		0226876A16BAD892008FC8FA /* Build configuration list for PBXNativeTarget "Objective-C UnitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0226876B16BAD892008FC8FA /* Debug */,

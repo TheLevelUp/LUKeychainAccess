@@ -9,5 +9,5 @@ import Foundation
 
 @objc public protocol LUKeychainErrorHandler: NSObjectProtocol {
   @objc (keychainAccess:receivedError:)
-  func keychainAccess(_ keychainAccess: LUKeychainAccess, received error:Error)
+  func keychainAccess(_ keychainAccess: LUKeychainAccess, received error: Error)
 }

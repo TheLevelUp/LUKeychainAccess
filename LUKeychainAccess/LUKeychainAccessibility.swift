@@ -15,7 +15,7 @@ import Foundation
   case alwaysThisDeviceOnly
   case whenUnlocked
   case whenUnlockedThisDeviceOnly
-  
+
   var stateCFType: CFTypeRef? {
     switch self {
     case .afterFirstUnlock:
@@ -40,5 +40,5 @@ import Foundation
       return kSecAttrAccessibleWhenUnlocked
     }
   }
-  
+
 }
