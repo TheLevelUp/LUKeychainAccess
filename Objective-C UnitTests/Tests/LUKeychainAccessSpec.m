@@ -1,4 +1,4 @@
-@import LUKeychainAccess;
+#import <LUKeychainAccess/LUKeychainAccess-Swift.h>
 #import <Kiwi/Kiwi.h>
 #import "LUTestErrorHandler.h"
 #import "LUTestNonNSCodingCompliantObject.h"
@@ -92,18 +92,17 @@ describe(@"LUKeychainAccess", ^{
 
   describe(@"accessGroup", ^{
     beforeEach(^{
-      [keychainAccess setAccessGroup:testGroup];
+      [keychainServices stub:@selector(accessGroup) andReturn:testGroup];
     });
 
     it(@"returns the accessGroup of keychain services", ^{
-      [keychainAccess.accessGroup shouldNotBeNil];
       [[keychainAccess.accessGroup should] equal:testGroup];
     });
   });
 
   describe(@"additionalQueryParams", ^{
     beforeEach(^{
-      [keychainAccess setAdditionalQueryParams:testAdditionalParams];
+      [keychainServices stub:@selector(additionalQueryParams) andReturn:testAdditionalParams];
     });
 
     it(@"returns the additionalQueryParams of keychain services", ^{
@@ -116,7 +115,8 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the boolValue of the object stored at the key", ^{
       BOOL testBool = YES;
-      [keychainAccess setBool:testBool forKey:key];
+      [keychainAccess stub:@selector(objectForKey:ofClass:) andReturn:@(testBool) withArguments:key, NSNumber.class];
+
       [[theValue([keychainAccess boolForKey:key]) should] equal:theValue(testBool)];
     });
   });
@@ -142,9 +142,8 @@ describe(@"LUKeychainAccess", ^{
       });
 
       it(@"notifies the error handler", ^{
-        NSData *data = [keychainAccess dataForKey:key];
+        [keychainAccess dataForKey:key];
 
-        [data shouldBeNil];
         [[errorHandler.lastError shouldNot] beNil];
       });
     });
@@ -155,7 +154,8 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the doubleValue of the object stored at the key", ^{
       double testDouble = 123.0;
-      [keychainAccess setDouble:testDouble forKey:key];
+      [keychainAccess stub:@selector(objectForKey:ofClass:) andReturn:@(testDouble) withArguments:key, NSNumber.class];
+
       [[theValue([keychainAccess doubleForKey:key]) should] equal:theValue(testDouble)];
     });
   });
@@ -165,7 +165,8 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the floatValue of the object stored at the key", ^{
       float testFloat = 123.0;
-      [keychainAccess setFloat:testFloat forKey:key];
+      [keychainAccess stub:@selector(objectForKey:ofClass:) andReturn:@(testFloat) withArguments:key, NSNumber.class];
+
       [[theValue([keychainAccess floatForKey:key]) should] equal:theValue(testFloat)];
     });
   });
@@ -175,7 +176,8 @@ describe(@"LUKeychainAccess", ^{
 
     it(@"returns the integerValue of the object stored at the key", ^{
       NSInteger testInteger = 123;
-      [keychainAccess setInteger:testInteger forKey:key];
+      [keychainAccess stub:@selector(objectForKey:ofClass:) andReturn:@(testInteger) withArguments:key, NSNumber.class];
+
       [[theValue([keychainAccess integerForKey:key]) should] equal:theValue(testInteger)];
     });
   });
@@ -202,20 +204,19 @@ describe(@"LUKeychainAccess", ^{
                  andReturn:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject]
              withArguments:key];
 
-      [[[keychainAccess objectForKey:key ofClasses:@[[NSArray class]]] should] equal:testObject];
+      [[[keychainAccess objectForKey:key ofClasses:[NSSet setWithArray:@[[NSArray class]]]] should] equal:testObject];
     });
 
     context(@"when the incorrect class types are passed in", ^{
       it(@"notifies the error handler", ^{
         NSSet *set = [NSSet setWithObjects: @"A", @"B", @"C", nil];
         NSArray *testObject = @[set];
-        
+
         [keychainAccess stub:@selector(dataForKey:)
                    andReturn:[NSKeyedArchiver lu_archivedDataWithRootObject:testObject]
                withArguments:key];
-        id object = [keychainAccess objectForKey:key ofClasses:@[[NSArray class]]];
-        
-        [object shouldBeNil];
+        [keychainAccess objectForKey:key ofClasses:[NSSet setWithArray:@[[NSArray class]]]];
+
         [[errorHandler.lastError shouldNot] beNil];
       });
     });
@@ -234,14 +235,14 @@ describe(@"LUKeychainAccess", ^{
     });
 
     context(@"when the object is not NSCoding compliant", ^{
-      it(@"returns success as false ", ^{
+      it(@"throws an exception", ^{
         LUTestNonNSCodingCompliantObject *testObject = [[LUTestNonNSCodingCompliantObject alloc] init];
         testObject.testProperty1 = 2;
         testObject.testProperty2 = @"Test";
 
         [[theBlock(^{
           [keychainAccess setObject:testObject forKey:key];
-        }) should] beFalse];
+        }) should] raiseWithName:@"Archiver Error"];
       });
     });
 
@@ -506,14 +507,14 @@ describe(@"LUKeychainAccess", ^{
     });
 
     context(@"when the object is not NSCoding compliant", ^{
-      it(@"returns succcess as false", ^{
+      it(@"throws an exception", ^{
         LUTestNonNSCodingCompliantObject *testObject = [[LUTestNonNSCodingCompliantObject alloc] init];
         testObject.testProperty1 = 2;
         testObject.testProperty2 = @"Test";
 
         [[theBlock(^{
           [keychainAccess setObject:testObject forKey:key];
-        }) should] beFalse];
+        }) should] raiseWithName:@"Archiver Error"];
       });
     });
 

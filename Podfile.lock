@@ -1,16 +1,25 @@
 PODS:
   - Kiwi (3.0.0)
+  - Nimble (11.1.0)
+  - Quick (6.0.0)
 
 DEPENDENCIES:
   - Kiwi (= 3.0.0)
+  - Nimble (= 11.1.0)
+  - Quick (= 6.0.0)
 
 SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Nimble
+    - Quick
   trunk:
     - Kiwi
 
 SPEC CHECKSUMS:
   Kiwi: fbeafef0f00e4d8f7dcb3420a4930afe70af77f7
+  Nimble: 81a6ab1afd3d84a75b18b910825f247ce5d3686a
+  Quick: 4d5ab9e81f0a632cbf9bc4f3069b55e5eeb175df
 
-PODFILE CHECKSUM: 671ab865b16f45f866977a5e5fd6a468c0c964bf
+PODFILE CHECKSUM: 1b8feb3e5953acc5da94f76491a96aaa36f3cb4f
 
 COCOAPODS: 1.11.3
