@@ -1,4 +1,4 @@
-#import <LUKeychainAccess/LUKeychainAccess.h>
+#import <LUKeychainAccess/LUKeychainAccess-Swift.h>
 #import <Kiwi/Kiwi.h>
 
 SPEC_BEGIN(LUKeychainServicesSpec)

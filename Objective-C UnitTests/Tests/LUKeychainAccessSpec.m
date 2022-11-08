@@ -1,9 +1,8 @@
-#import <LUKeychainAccess/LUKeychainAccess.h>
+#import <LUKeychainAccess/LUKeychainAccess-Swift.h>
 #import <Kiwi/Kiwi.h>
 #import "LUTestErrorHandler.h"
 #import "LUTestNonNSCodingCompliantObject.h"
 #import "LUTestNSCodingCompliantObject.h"
-#import "NSKeyedArchiver+Additions.h"
 
 SPEC_BEGIN(LUKeychainAccessSpec)
 
@@ -18,7 +17,7 @@ describe(@"LUKeychainAccess", ^{
   id (^errorReturningBlock)(NSArray *) = ^id(NSArray *params) {
     __autoreleasing NSError **error;
     [(NSValue *)[params lastObject] getValue:&error];
-    *error = [NSError errorWithDomain:LUKeychainAccessErrorDomain code:errSecDuplicateItem userInfo:nil];
+    *error = [NSError errorWithDomain:LUKeychainAccess.errorDomain code:errSecDuplicateItem userInfo:nil];
 
     return [KWValue valueWithBool:NO];
   };
