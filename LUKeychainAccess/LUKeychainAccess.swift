@@ -37,7 +37,7 @@ public let LUKeychainAccessVersionString = ""
   public var service: String? { return services.service }
 
   // MARK: - Private Properties
-  private var services = LUKeychainServices.keychainServices
+  internal var services: LUKeychainServicesProtocol = LUKeychainServices.keychainServices
 
   // MARK: - Public Delete Functions
   @objc @discardableResult
@@ -81,7 +81,7 @@ public let LUKeychainAccessVersionString = ""
   public func register(defaults: [String: Any]) -> Bool {
     for (key, value) in defaults {
       guard let type = value.self as? AnyClass else {
-          assertionFailure("Error getting type of \(value)")
+        handle(error: LUKeychainAccessError.invalidType)
         return false
       }
 
@@ -91,7 +91,7 @@ public let LUKeychainAccessVersionString = ""
         } else if let object = value as Any? {
           return set(object: object, for: key)
         } else {
-            assertionFailure("Unable to register as not object type")
+          handle(error: LUKeychainAccessError.invalidType)
           return false
         }
       }
@@ -146,7 +146,7 @@ public let LUKeychainAccessVersionString = ""
   @objc (setString:forKey:) @discardableResult
   public func set(string: String, for key: String) -> Bool {
     guard let data = string.data(using: String.Encoding.utf8) else {
-        assertionFailure("Unable to encode string")
+      handle(error: LUKeychainAccessError.encodingFailed)
       return false
     }
     return set(data: data, for: key)
@@ -154,18 +154,20 @@ public let LUKeychainAccessVersionString = ""
 
   @objc (setObject:forKey:) @discardableResult
   public func set(object: Any, for key: String) -> Bool {
-    guard let data: Data = NSKeyedArchiver.lu_archivedData(with: object) else {
-        assertionFailure("Unable to archive with root object")
-      return false
+    do {
+      if let data: Data = try NSKeyedArchiver.archivedData(with: object) {
+        return self.set(data: data, for: key)
+      }
+    } catch let error {
+      handle(error: error)
     }
-
-    return self.set(data: data, for: key)
+    return false
   }
 
   // MARK: - Public Get Functions
   @objc (boolForKey:) @discardableResult
   public func bool(for key: String) -> Bool {
-    return number(for: key).boolValue
+    return ((try? number(for: key).boolValue) != nil)
   }
 
   @objc (dataForKey:) @discardableResult
@@ -181,17 +183,20 @@ public let LUKeychainAccessVersionString = ""
 
   @objc (doubleForKey:)
   public func double(for key: String) -> Double {
-    return number(for: key).doubleValue
+    let number = try? number(for: key)
+    return (number ?? 0).doubleValue
   }
 
   @objc (floatForKey:)
   public func float(for key: String) -> Float {
-    return number(for: key).floatValue
+    let number = try? number(for: key)
+    return (number ?? 0).floatValue
   }
 
   @objc (integerForKey:)
   public func integer(for key: String) -> Int {
-    return number(for: key).intValue
+    let number = try? number(for: key)
+    return (number ?? 0).intValue
   }
 
   @objc (stringForKey:)
@@ -215,7 +220,7 @@ public let LUKeychainAccessVersionString = ""
     guard let object = NSKeyedUnarchiver.lu_unarchiveObject(ofClasses: classes, with: data) else {
       let message = "Error while calling objectForKey: with key \(key)"
       let error = NSError(domain: LUKeychainAccess.errorDomain,
-                          code: LUKeychainAccessError.LUKeychainAccessInvalidArchiveError.rawValue, userInfo: [NSLocalizedDescriptionKey: message])
+                          code: LUKeychainAccessErrorCode.LUKeychainAccessInvalidArchiveError.rawValue, userInfo: [NSLocalizedDescriptionKey: message])
       handle(error: error)
       return nil
     }
@@ -245,16 +250,13 @@ public let LUKeychainAccessVersionString = ""
     }
   }
 
-  private func number(for key: String) /*throws*/ -> NSNumber {
+  private func number(for key: String) throws -> NSNumber {
     guard let object = object(for: key, ofClass: NSNumber.self) else {
-     // throw LUKeychainUnarchiveError.objectNotFound(key: key)
-        assertionFailure("Object not found for key \(key)")
-      return 0
+     throw LUKeychainUnarchiveError.objectNotFound(key: key)
     }
+    
     guard let number = object as? NSNumber else {
-      // throw LUKeychainUnarchiveError.unexpectedType(object: object, key: key, expectedType: NSNumber.self)
-        assertionFailure("Object is not expect NSNumber with key \(key)")
-      return 0
+      throw LUKeychainUnarchiveError.unexpectedType(object: object, key: key, expectedType: NSNumber.self)
     }
 
     return number

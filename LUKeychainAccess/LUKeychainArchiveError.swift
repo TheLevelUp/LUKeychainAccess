@@ -9,5 +9,4 @@ import Foundation
 
 public enum LUKeychainArchiveError: Error {
   case unexpectedType(object: Any, key: AnyHashable, expectedType: Any.Type)
-
 }
